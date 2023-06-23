@@ -50,9 +50,10 @@ def main():
     print("Running...")
     client = TrajectoryClient(args.limb)    
     client.traj_p.open_gripper()
-    client.transfer(rigid.locations['X'])
+    client.transfer(rigid.locations['test'])
     time.sleep(1)
     result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'box', client), ('handover', 'robot', 'human', 'screwdriver', client)])
+
     print(result)
 
 if __name__ == "__main__":

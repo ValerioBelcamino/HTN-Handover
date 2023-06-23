@@ -56,7 +56,17 @@ rigid.Y.orientation.y = 0.0
 rigid.Y.orientation.z = 0.0
 rigid.Y.orientation.w = 0.0
 
+rigid.test = Pose()
+rigid.test.position.x = 0.67
+rigid.test.position.y = -0.61
+rigid.test.position.z = -0.27 #-0.22
+rigid.test.orientation.x = 1.0
+rigid.test.orientation.y = 0.0
+rigid.test.orientation.z = 0.0
+rigid.test.orientation.w = 0.0
+
 rigid.locations = {'table': [rigid.screwdriver_pose, rigid.screwdriver_pose2], 
                    'exchange point': [rigid.handover_location],
                     'X': [rigid.X],
-                    'Y': [rigid.Y]}
+                    'Y': [rigid.Y],
+                    'test': [rigid.test]}
