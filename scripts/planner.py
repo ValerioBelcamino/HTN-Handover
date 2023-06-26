@@ -53,6 +53,7 @@ def main():
     client.transfer(rigid.locations['test'])
     time.sleep(1)
     result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'box', client), ('handover', 'robot', 'human', 'screwdriver', client)])
+    result = gtpyhop.find_plan(state1, [('deliver_objects', 'robot', ['brick1', 'brick6', 'brick4', 'brick3', 'brick2', 'brick5'], client)])
 
     print(result)
 

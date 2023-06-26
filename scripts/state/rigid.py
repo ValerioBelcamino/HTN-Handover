@@ -69,4 +69,5 @@ rigid.locations = {'table': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
                    'exchange point': [rigid.handover_location],
                     'X': [rigid.X],
                     'Y': [rigid.Y],
-                    'test': [rigid.test]}
+                    'test': [rigid.test],
+                    'workspace': []} #place in front of the human where he assembles the chair
