@@ -36,7 +36,7 @@ def pick_and_place(state, agent, loc_to, traj_client):
 
 def deliver_objects(state, agent, obj_list, traj_client):
     if agent in state.agents and set(obj_list) <= state.objects and not state.holding[agent]:
-        return [('check_available_obj', obj_list), ('process_available_objects', agent, traj_client)]
+        return [('check_available_obj', obj_list, traj_client), ('process_available_objects', agent, traj_client)]
 
 def do_nothing(state, agent, traj_client):
     if state.available_objects == []:

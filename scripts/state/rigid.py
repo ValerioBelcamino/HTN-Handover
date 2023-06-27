@@ -5,8 +5,8 @@ from copy import copy
 rigid = State("rigid")
 
 rigid.screwdriver_pose = Pose()
-rigid.screwdriver_pose.position.x = 0.52
-rigid.screwdriver_pose.position.y = -0.31
+rigid.screwdriver_pose.position.x = 0.52 - 0.06
+rigid.screwdriver_pose.position.y = -0.31 
 rigid.screwdriver_pose.position.z = -0.20 #-0.22
 rigid.screwdriver_pose.orientation.x = 1.0
 rigid.screwdriver_pose.orientation.y = 0.0
@@ -65,9 +65,27 @@ rigid.test.orientation.y = 0.0
 rigid.test.orientation.z = 0.0
 rigid.test.orientation.w = 0.0
 
+rigid.workspace = Pose()
+rigid.workspace.position.x = 0.52+0.10
+rigid.workspace.position.y = -0.31+0.10
+rigid.workspace.position.z = -0.20 #-0.22
+rigid.workspace.orientation.x = 1.0
+rigid.workspace.orientation.y = 0.0
+rigid.workspace.orientation.z = 0.0
+rigid.workspace.orientation.w = 0.0
+
+rigid.workspace2 = Pose()
+rigid.workspace2.position.x = 0.52+0.10
+rigid.workspace2.position.y = -0.31+0.10
+rigid.workspace2.position.z = -0.32
+rigid.workspace2.orientation.x = 1.0
+rigid.workspace2.orientation.y = 0.0
+rigid.workspace2.orientation.z = 0.0
+rigid.workspace2.orientation.w = 0.0
+
 rigid.locations = {'table': [rigid.screwdriver_pose, rigid.screwdriver_pose2], 
                    'exchange point': [rigid.handover_location],
                     'X': [rigid.X],
                     'Y': [rigid.Y],
                     'test': [rigid.test],
-                    'workspace': []} #place in front of the human where he assembles the chair
+                    'workspace': [rigid.workspace, rigid.workspace2]} #place in front of the human where he assembles the chair

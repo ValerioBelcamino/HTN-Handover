@@ -15,7 +15,7 @@ from control_msgs.msg import (
     FollowJointTrajectoryGoal,
     GripperCommandActionGoal
 )
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool, String
 from trajectory_msgs.msg import (
     JointTrajectoryPoint,
 )
@@ -32,11 +32,17 @@ class TrajectoryClient():
         self.limb = limb
         rospy.Subscriber("/right_arm/baxter_moveit_trajectory", MoveitTrajectory, self.callback)
         self.release_sub = rospy.Subscriber("/melexis_release", Bool, self.release_callback)
+        self.aruco_objects = rospy.Subscriber("/aruco_detection", String, self.aruco_callback)
+
         self.melexis_activation_pub = rospy.Publisher("/melexis_activation", Bool, queue_size=10)
         self.camera_activation_pub = rospy.Publisher("/camera_listener_activation", Bool, queue_size=10)
+        self.aruco_activation_pub = rospy.Publisher("/aruco_detection_activation", Bool, queue_size=10)
+
         self.trajTime = 6.0 # Time to complete each trajectory 
         self.traj_p = TrajectoryPlanner()
         self.stop_sleeping_sig = Event()
+
+        self.current_obj = []
 
     def callback(self, msg):
 
@@ -61,6 +67,13 @@ class TrajectoryClient():
         
         self.ex_complete_pub.publish(True)
         print("Action Complete")
+
+    def aruco_callback(self, msg):
+        rospy.loginfo("aruco_callback")
+        print(msg)
+        self.current_obj = msg.data.split('_')
+        if not self.stop_sleeping_sig.is_set():
+            self.stop_sleeping_sig.set()
 
     def release_callback(self, msg):
         rospy.loginfo("Release callback")
@@ -92,11 +105,13 @@ class TrajectoryClient():
         failures = False
         for pose in poses:
             rospy.logerr("Transfer function called")
+            rospy.logerr(pose)
             temp_pose = deepcopy(pose)
             #reach XY location above object
             simple_traj, fract = self.traj_p.plan_cartesian_trajectory(temp_pose)
+            
             print('fraction', fract)
-            if fract > 0.99:
+            if fract > 0.90:
                 self.execute_trajectory(simple_traj)
             else:
                 rospy.logerr(fract)
@@ -125,7 +140,7 @@ class TrajectoryClient():
 
         simple_traj, fract = self.traj_p.plan_cartesian_trajectory(pose)
         print('fraction', fract)
-        if fract > 0.99:
+        if fract > 0.90:
             self.execute_trajectory(simple_traj)
 
 

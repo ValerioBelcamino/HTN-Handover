@@ -97,16 +97,17 @@ class TrajectoryPlanner():
 
     def plan_cartesian_trajectory(self, destination_pose):#, start_joint_angles):
         
-        # (plan, fraction) = self.move_group.compute_cartesian_path([destination_pose], 0.01, 0.0) #TODO MAX STEP
+        (plan, fraction) = self.move_group.compute_cartesian_path([destination_pose], 0.01, 0.0) #TODO MAX STEP
         self.move_group.set_pose_target(destination_pose)
-        plan = self.move_group.plan()
+        # plan = self.move_group.plan()
 
-        fraction = 1.0
-        print(len(plan[1].joint_trajectory.points))
-        if len(plan[1].joint_trajectory.points) == 0:
-            fraction = 0.5
+        # fraction = 1.0
+        # print(plan)
+        # print(len(plan[1].joint_trajectory.points))
+        # if len(plan[1].joint_trajectory.points) == 0:
+        #     fraction = 0.5
             
-        return plan[1], fraction
+        return plan, fraction
 
 
     def newStartState(self, joints):
