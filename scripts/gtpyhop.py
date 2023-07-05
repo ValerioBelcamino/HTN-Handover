@@ -38,6 +38,9 @@ much debugging information GTPyhop will print:
 # Sequence number to use when making copies of states.
 _next_state_number = 0
 
+output_file = '/home/index1/index_ws/src/baxter_moveit/scripts/plan_htn.txt'
+f = open(output_file, 'w+')
+
 class State():
     """
     s = State(state_name, **kwargs) creates an object that contains the
@@ -207,13 +210,18 @@ def _print_object(object, heading=None):
         title = f"{heading} {object.__name__}:"
         dashes = '-'*len(title)
         print(title)
+        f.write(title + '\n')
         print(dashes)
+        f.write(dashes + '\n')
         for (varname,val) in vars(object).items():
             if varname != '__name__':
                 print(f"  - {varname} = {val}")
+                f.write(f"  - {varname} = {val}" + '\n')
         print('')
+        f.write('\n')
     else: 
         print('{heading} = False','\n')
+        f.write('{heading} = False' + '\n')
 
 
 # print_state and print_multigoal are identical except for their names.
@@ -620,6 +628,7 @@ final plan; it just will verify whether m did what it was supposed to do.
 
 
 def _m_verify_g(state, method, state_var, arg, desired_val, depth):
+    global f
     """
     _m_verify_g is a method that GTPyhop uses to check whether a
     unigoal method has achieved the goal for which it was used.
@@ -630,10 +639,13 @@ def _m_verify_g(state, method, state_var, arg, desired_val, depth):
     if verbose >= 3:
         print(f"depth {depth}: method {method} achieved",
                 f"goal {state_var}[{arg}] = {desired_val}")
+        f.write(f"depth {depth}: method {method} achieved" + "\n" +
+                f"goal {state_var}[{arg}] = {desired_val}")
     return []       # i.e., don't create any subtasks or subgoals
 
 
 def _m_verify_mg(state, method, multigoal, depth):
+    global f
     """
     _m_verify_g is a method that GTPyhop uses to check whether a multigoal
     method has achieved the multigoal for which it was used.
@@ -644,6 +656,7 @@ def _m_verify_mg(state, method, multigoal, depth):
                         f"didn't achieve {multigoal}]")
     if verbose >= 3:
         print(f"depth {depth}: method {method} achieved {multigoal}")
+        f.write(f"depth {depth}: method {method} achieved {multigoal}")
     return []
 
 
@@ -652,6 +665,7 @@ def _m_verify_mg(state, method, multigoal, depth):
 
 
 def _apply_action_and_continue(state, task1, todo_list, plan, depth):
+    global f
     """
     _apply_action_and_continue is called only when task1's name matches an
     action name. It applies the action by retrieving the action's function
@@ -660,19 +674,23 @@ def _apply_action_and_continue(state, task1, todo_list, plan, depth):
     """
     if verbose >= 3:
         print(f'depth {depth} action {task1}: ', end='')
+        f.write(f'depth {depth} action {task1}: ')
     action = current_domain._action_dict[task1[0]]
     newstate = action(state.copy(),*task1[1:])
     if newstate:
         if verbose >= 3:
             print('applied')
+            f.write('applied' + "\n")
             newstate.display()
         return seek_plan(newstate, todo_list, plan+[task1], depth+1)
     if verbose >= 3:
         print('not applicable')
+        f.write('not applicable' + "\n")
     return False
 
 
 def _refine_task_and_continue(state, task1, todo_list, plan, depth):
+    global f
     """
     If task1 is in the task-method dictionary, then iterate through the list
     of relevant methods to find one that's applicable, apply it to get
@@ -684,27 +702,34 @@ def _refine_task_and_continue(state, task1, todo_list, plan, depth):
     relevant = current_domain._task_method_dict[task1[0]]
     if verbose >= 3:
         print(f'depth {depth} task {task1} methods {[m.__name__ for m in relevant]}')
+        f.write(f'depth {depth} task {task1} methods {[m.__name__ for m in relevant]}' + "\n")
     for method in relevant:
         if verbose >= 3: 
             print(f'depth {depth} trying {method.__name__}: ', end='')
+            f.write(f'depth {depth} trying {method.__name__}: '+ "\n")
         subtasks = method(state, *task1[1:])
         # Can't just say "if subtasks:", because that's wrong if subtasks == []
         if subtasks != False and subtasks != None:
             if verbose >= 3:
                 print('applicable')
+                f.write('applicable' + "\n")
                 print(f'depth {depth} subtasks: {subtasks}')
+                f.write(f'depth {depth} subtasks: {subtasks}' + "\n")
             result = seek_plan(state, subtasks+todo_list, plan, depth+1)
             if result != False and result != None:
                 return result
         else:
             if verbose >= 3:
                 print(f'not applicable')
+                f.write(f'not applicable' + "\n")
     if verbose >= 3:
         print(f'depth {depth} could not accomplish task {task1}')        
+        f.write(f'depth {depth} could not accomplish task {task1}' + "\n")
     return False
 
 
 def _refine_unigoal_and_continue(state, goal1, todo_list, plan, depth):
+    global f
     """
     If goal1 is in the unigoal-method dictionary, then iterate through the
     list of relevant methods to find one that's applicable, apply it to get
@@ -716,23 +741,30 @@ def _refine_unigoal_and_continue(state, goal1, todo_list, plan, depth):
     """
     if verbose >= 3:
         print(f'depth {depth} goal {goal1}: ', end='')
+        f.write(f'depth {depth} goal {goal1}: ')
     (state_var_name, arg, val) = goal1
     if vars(state).get(state_var_name).get(arg) == val:
         if verbose >= 3:
             print(f'already achieved')
+            f.write(f'already achieved' + "\n")
         return seek_plan(state, todo_list, plan, depth+1)
     relevant = current_domain._unigoal_method_dict[state_var_name]
     if verbose >= 3:
         print(f'methods {[m.__name__ for m in relevant]}')
+        f.write(f'methods {[m.__name__ for m in relevant]}' + "\n")
     for method in relevant:
         if verbose >= 3: 
             print(f'depth {depth} trying method {method.__name__}: ', end='')
+            f.write(f'depth {depth} trying method {method.__name__}: ')
         subgoals = method(state,arg,val)
         # Can't just say "if subgoals:", because that's wrong if subgoals == []
         if subgoals != False and subgoals != None:
             if verbose >= 3:
                 print('applicable')
+                f.write('applicable' + "\n")
                 print(f'depth {depth} subgoals: {subgoals}')
+                f.write(f'depth {depth} subgoals: {subgoals}' + "\n")
+
             if verify_goals:
                 verification = [('_verify_g', method.__name__, \
                                  state_var_name, arg, val, depth)]
@@ -744,13 +776,16 @@ def _refine_unigoal_and_continue(state, goal1, todo_list, plan, depth):
                 return result
         else:
             if verbose >= 3:
-                print(f'not applicable')        
+                print(f'not applicable')   
+                f.write(f'not applicable' + "\n")     
     if verbose >= 3:
-        print(f'depth {depth} could not achieve goal {goal1}')        
+        print(f'depth {depth} could not achieve goal {goal1}') 
+        f.write(f'depth {depth} could not achieve goal {goal1}' + "\n")       
     return False
 
 
 def _refine_multigoal_and_continue(state, goal1, todo_list, plan, depth):
+    global f
     """
     If goal1 is a multigoal, then iterate through the list of multigoal
     methods to find one that's applicable, apply it to get additional
@@ -762,18 +797,23 @@ def _refine_multigoal_and_continue(state, goal1, todo_list, plan, depth):
     """
     if verbose >= 3:
         print(f'depth {depth} multigoal {goal1}: ', end='')
+        f.write(f'depth {depth} multigoal {goal1}: ')
     relevant = current_domain._multigoal_method_list
     if verbose >= 3:
         print(f'methods {[m.__name__ for m in relevant]}')
+        f.write(f'methods {[m.__name__ for m in relevant]}' + "\n")
     for method in relevant:
         if verbose >= 3: 
             print(f'depth {depth} trying method {method.__name__}: ', end='')
+            f.write(f'depth {depth} trying method {method.__name__}: ')
         subgoals = method(state,goal1)
         # Can't just say "if subgoals:", because that's wrong if subgoals == []
         if subgoals != False and subgoals != None:
             if verbose >= 3:
                 print('applicable')
+                f.write('applicable' + "\n")
                 print(f'depth {depth} subgoals: {subgoals}')
+                f.write(f'depth {depth} subgoals: {subgoals}' + "\n")
             if verify_goals:
                 verification = [('_verify_mg', method.__name__, goal1, depth)]
             else:
@@ -785,8 +825,10 @@ def _refine_multigoal_and_continue(state, goal1, todo_list, plan, depth):
         else:
             if verbose >= 3:
                 print(f'not applicable')
+                f.write(f'not applicable' + "\n")
     if verbose >= 3:
-        print(f'depth {depth} could not achieve multigoal {goal1}')        
+        print(f'depth {depth} could not achieve multigoal {goal1}') 
+        f.write(f'depth {depth} could not achieve multigoal {goal1}' + "\n")       
     return False
 
 
@@ -795,6 +837,8 @@ def _refine_multigoal_and_continue(state, goal1, todo_list, plan, depth):
 
 
 def find_plan(state, todo_list):
+    global f, output_file
+    f = open(output_file, "a")
     """
     find_plan tries to find a plan that accomplishes the items in todo_list,
     starting from the given state, using whatever methods and actions you
@@ -806,9 +850,14 @@ def find_plan(state, todo_list):
     if verbose >= 1: 
         todo_string = '[' + ', '.join([_item_to_string(x) for x in todo_list]) + ']'
         print(f'FP> find_plan, verbose={verbose}:')
+        f.write(f'FP> find_plan, verbose={verbose}:' + "\n")
         print(f'    state = {state.__name__}\n    todo_list = {todo_string}')
+        f.write(f'    state = {state.__name__}\n    todo_list = {todo_string}' + "\n")
     result = seek_plan(state, todo_list, [], 0)
-    if verbose >= 1: print('FP> result =',result,'\n')
+    if verbose >= 1: 
+        print('FP> result =',result,'\n')
+        f.write('FP> result =' + str(result) + "\n")
+    f.close()
     return result
 
 
@@ -821,6 +870,7 @@ def pyhop(state, todo_list):
 
 
 def seek_plan(state, todo_list, plan, depth):
+    global f
     """
     Workhorse for find_plan. Arguments:
      - state is the current state
@@ -831,9 +881,11 @@ def seek_plan(state, todo_list, plan, depth):
     if verbose >= 2: 
         todo_string = '[' + ', '.join([_item_to_string(x) for x in todo_list]) + ']'
         print(f'depth {depth} todo_list ' + todo_string)
+        f.write(f'depth {depth} todo_list ' + todo_string + '\n')
     if todo_list == []:
         if verbose >= 3:
             print(f'depth {depth} no more tasks or goals, return plan')
+            f.write(f'depth {depth} no more tasks or goals, return plan' + "\n")
         return plan
     item1 = todo_list[0]
     ttype = get_type(item1)

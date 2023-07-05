@@ -3,25 +3,29 @@ import gtpyhop
 
 def pick(state, agent, obj, loc_to, traj_client):
     if agent in state.agents and obj in state.objects and not state.holding[agent]:
-        return [('transfer', agent, state.at[agent], state.at[obj], traj_client), 
+        return [('choose_arm', obj, agent),
+                ('transfer', agent, state.at[obj], traj_client), 
                 ('grasp', agent, obj, traj_client), 
-                ('transfer', agent, state.at[obj], loc_to, traj_client)]
+                ('transfer', agent, loc_to, traj_client)]
 
 def exchange(state, agent1, agent2, obj, traj_client):
     if agent1 in state.agents and agent2 in state.agents and state.holding[agent1] == obj:
-        if obj == 'screwdriver':
+        if obj == 'screwdriver' or obj == 'screwdriver2':
             return[('grasp', agent2, obj, traj_client), 
-                ('release', agent1, obj, traj_client)]
+                ('release', agent1, obj, traj_client),
+                ('reset_active_arm', agent1)]
         elif obj == 'box':
             return[('grasp', agent2, obj, traj_client), 
                    ('wait_empty_box', traj_client), 
-                ('transfer', agent1, 'exchange point', 'table', traj_client),
+                ('transfer', agent1, 'table', traj_client),
                 ('release', agent1, obj, traj_client),
-                ('transfer', agent1, 'table', 'X', traj_client)]
+                ('transfer', agent1, 'X', traj_client),
+                ('reset_active_arm', agent1)]
 
 def receive(state, agent, obj, traj_client):
-    if agent in state.agents and obj in state.objects and not state.holding[agent]:
-        return [('transfer', agent, state.at[agent], 'exchange point', traj_client)]
+    if agent in state.agents and obj in state.objects:
+    #and not state.holding[agent]:
+        return [('transfer', agent, 'exchange point', traj_client)]
 
 def handover(state, agent1, agent2, obj, traj_client):
     if agent1 in state.agents and agent2 in state.agents:
@@ -32,7 +36,8 @@ def handover(state, agent1, agent2, obj, traj_client):
 def pick_and_place(state, agent, loc_to, traj_client):
     if state.selected_object and agent in state.agents and loc_to in state.locations:
         return [('pick', agent, state.selected_object, loc_to, traj_client), 
-                ('release', agent, state.selected_object, traj_client)]
+                ('release', agent, state.selected_object, traj_client),
+                ('reset_active_arm', agent)]
 
 def deliver_objects(state, agent, obj_list, traj_client):
     if agent in state.agents and set(obj_list) <= state.objects and not state.holding[agent]:

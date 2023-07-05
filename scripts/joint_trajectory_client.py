@@ -80,7 +80,7 @@ class TrajectoryClient():
         if not self.stop_sleeping_sig.is_set():
             self.stop_sleeping_sig.set()
         if msg.data:
-            self.traj_p.open_gripper()
+            self.traj_p.open_gripper('right')
 
     def execute_trajectory(self, trajectory, side):
 
@@ -101,13 +101,9 @@ class TrajectoryClient():
     
         print("Action Complete")
 
-    def transfer(self, poses):
+    def transfer(self, poses, side):
         failures = False
-        side = None
-        if poses[0].position.y > 0:
-            side = 'left'
-        else:
-            side = 'right'
+
         for pose in poses:
             rospy.logerr("Transfer function called")
             rospy.logerr(pose)

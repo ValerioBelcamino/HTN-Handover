@@ -58,16 +58,29 @@ def main():
     client.traj_p.open_gripper('left')
     client.traj_p.open_gripper('right')
 
-    iter = 0
-    while True:
-        client.transfer(rigid.locations['exchange point'])
-        client.transfer(rigid.locations['test'])
-        time.sleep(2)
-        rigid.handover_location.position.y *= -1.0
-        rigid.test.position.y *= -1.0
-        iter += 1
-        if iter == 2:
-            break
+    result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client), ('handover', 'robot', 'human', 'screwdriver2', client)])
+
+    # iter = 0
+    # while True:
+    #     result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client), ('handover', 'robot', 'human', 'screwdriver2', client)])
+    #     # client.transfer(rigid.locations['exchange point'])
+    #     time.sleep(1)
+    #     side = None 
+    #     if rigid.locations['test'][0].position.y > 0.0:
+    #         side = 'left'
+    #     else:
+    #         side = 'right'
+
+    #     client.transfer(rigid.locations['test'], side)
+    #     time.sleep(2)
+    #     # rigid.handover_location.position.y *= -1.0
+    #     rigid.test.position.y *= -1.0
+    #     rigid.screwdriver_pose.position.y *= -1.0
+    #     rigid.screwdriver_pose2.position.y *= -1.0
+    #     rigid.handover_location.position.y *= -1.0
+    #     iter += 1
+    #     if iter == 4:
+    #         break
     # HD = ArucoDetection()
     # while True:
     #     t,r = HD.loop()

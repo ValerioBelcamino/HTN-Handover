@@ -22,14 +22,34 @@ rigid.screwdriver_pose2.orientation.y = 0.0
 rigid.screwdriver_pose2.orientation.z = 0.0
 rigid.screwdriver_pose2.orientation.w = 0.0
 
+rigid.screwdriver_poseTMP = Pose()
+rigid.screwdriver_poseTMP.position.x = 0.52 - 0.06
+rigid.screwdriver_poseTMP.position.y = 0.31 
+rigid.screwdriver_poseTMP.position.z = -0.20 #-0.22
+rigid.screwdriver_poseTMP.orientation.x = 1.0
+rigid.screwdriver_poseTMP.orientation.y = 0.0
+rigid.screwdriver_poseTMP.orientation.z = 0.0
+rigid.screwdriver_poseTMP.orientation.w = 0.0
+
+rigid.screwdriver_pose2TMP = Pose()
+rigid.screwdriver_pose2TMP.position.x = 0.52
+rigid.screwdriver_pose2TMP.position.y = 0.31
+rigid.screwdriver_pose2TMP.position.z = -0.32
+rigid.screwdriver_pose2TMP.orientation.x = 1.0
+rigid.screwdriver_pose2TMP.orientation.y = 0.0
+rigid.screwdriver_pose2TMP.orientation.z = 0.0
+rigid.screwdriver_pose2TMP.orientation.w = 0.0
+
 rigid.handover_location = Pose()
 rigid.handover_location.position.x = 0.82
-rigid.handover_location.position.y = -0.13
+rigid.handover_location.position.y = -0.23
 rigid.handover_location.position.z = 0.16
 rigid.handover_location.orientation.x = 1.0
 rigid.handover_location.orientation.y = 0.0
 rigid.handover_location.orientation.z = 0.0
 rigid.handover_location.orientation.w = 0.0
+
+
 # rigid.handover_location.position.x = 0.95
 # rigid.handover_location.position.y = -0.13
 # rigid.handover_location.position.z = 0.21
@@ -93,6 +113,7 @@ rigid.workspace2.orientation.z = 0.0
 rigid.workspace2.orientation.w = 0.0
 
 rigid.locations = {'table': [rigid.screwdriver_pose, rigid.screwdriver_pose2], 
+                   'table2': [rigid.screwdriver_poseTMP, rigid.screwdriver_pose2TMP], 
                    'exchange point': [rigid.handover_location],
                     'X': [rigid.X],
                     'Y': [rigid.Y],

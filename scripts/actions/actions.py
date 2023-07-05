@@ -3,28 +3,39 @@ import time
 import random
 from state.rigid import rigid
 
-def transfer(state, agent, loc_from, loc_to, traj_client):
-    if agent in state.agents and loc_from in state.locations and loc_to in state.locations and state.at[agent] == loc_from:
+def transfer(state, agent, loc_to, traj_client):
+    if agent in state.agents and loc_to in state.locations:
+        loc_from = state.at[agent] 
+        loc_to_pose = rigid.locations[loc_to]
+
         if agent == 'robot':
+            if loc_to == 'exchange point' and state.active_arm[agent] == 'left':
+                for i in range(len(loc_to_pose)):
+                    loc_to_pose[i].position.y *= -1.0
             if len(rigid.locations[loc_from])>1:
-                if not traj_client.transfer([rigid.locations[loc_from][0]]):
+                if not traj_client.transfer([rigid.locations[loc_from][0]], state.active_arm[agent]):
                     return None
-            if not traj_client.transfer(rigid.locations[loc_to]):
+            if not traj_client.transfer(loc_to_pose, state.active_arm[agent]):
                 return None
         state.at[agent] = loc_to
+        state.at[state.active_arm[agent]] = loc_to
         if state.holding[agent]:
             obj = state.holding[agent]
             state.at[obj] = loc_to
         return state
 
 def grasp(state, agent, obj, traj_client):
-    if agent in state.agents and obj in state.objects and state.at[agent] == state.at[obj] and not state.holding[agent]:
+    if agent in state.agents and obj in state.objects and state.at[agent] == state.at[obj]: #and not state.holding[agent]:
+        # TO TEST
         if agent == 'robot':
-            traj_client.traj_p.close_gripper()
-        if agent == 'human' and obj == 'box':
-            state.holding[agent] = None#'screws'
-        else:
-            state.holding[agent] = obj
+            if not state.holding[agent]:
+                traj_client.traj_p.close_gripper(state.active_arm[agent])
+                state.holding[agent] = obj
+        if agent == 'human':
+            if obj == 'box':
+                state.holding[agent] = None#'screws'
+            else:      
+                state.holding[agent] = obj
         return state
 
 def wait_empty_box(state, traj_client):
@@ -40,12 +51,14 @@ def release(state, agent, obj, traj_client):
     if agent in state.agents and obj in state.objects and state.holding[agent] == obj:
         if agent == 'robot':
             if state.at[agent] == 'exchange point':
-                traj_client.melexis_activation_pub.publish(True)
-                if traj_client.stop_sleeping_sig.is_set():
-                    traj_client.stop_sleeping_sig.clear()
-                traj_client.stop_sleeping_sig.wait()
-
-        traj_client.traj_p.open_gripper()
+                if state.active_arm[agent] == 'right':
+                    traj_client.melexis_activation_pub.publish(True)
+                    if traj_client.stop_sleeping_sig.is_set():
+                        traj_client.stop_sleeping_sig.clear()
+                    traj_client.stop_sleeping_sig.wait()
+                # TO TEST
+                if state.active_arm[agent] == 'left':
+                    traj_client.traj_p.open_gripper(state.active_arm[agent])
         state.holding[agent] = None
         return state 
 
@@ -81,4 +94,26 @@ def choose_obj(state):
             # state.available_objects.remove(state.selected_object)
         return state
 
-gtpyhop.declare_actions(transfer, grasp, release, wait_empty_box, check_available_obj, choose_obj)
+
+def choose_arm(state, obj, agent):
+    if agent in state.agents and obj in state.objects:
+        if agent == 'human':
+            return state
+        elif agent == 'robot':
+            loc = state.at[obj]
+            if rigid.locations[loc][0].position.y > 0:
+                state.active_arm[agent] = 'left'
+            else:
+                state.active_arm[agent] = 'right'
+            state.at[agent] = state.at[state.active_arm[agent]]
+        return state
+    
+def reset_active_arm(state, agent):
+    if agent in state.agents:
+        if agent == 'human':
+            return state
+        elif agent == 'robot':
+            state.active_arm[agent] = None
+        return state
+
+gtpyhop.declare_actions(transfer, grasp, release, wait_empty_box, check_available_obj, choose_obj, choose_arm, reset_active_arm)
