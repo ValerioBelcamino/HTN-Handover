@@ -6,6 +6,8 @@ from joint_trajectory_client import TrajectoryClient
 import baxter_interface
 from baxter_interface import CHECK_VERSION
 import argparse
+from logitech_pose_estimation import ArucoDetection
+from geometry_msgs.msg import Pose
 
 domain = gtpyhop.Domain('handover')
 from methods.methods import *
@@ -49,9 +51,40 @@ def main():
     rs.enable()
     print("Running...")
     client = TrajectoryClient(args.limb)    
-    client.traj_p.open_gripper()
-    client.transfer(rigid.locations['test'])
+
+    # client.traj_p.close_gripper('left')
+    # client.traj_p.close_gripper('right')
+    # time.sleep(3)
+    client.traj_p.open_gripper('left')
+    client.traj_p.open_gripper('right')
+
+    iter = 0
+    while True:
+        client.transfer(rigid.locations['exchange point'])
+        client.transfer(rigid.locations['test'])
+        time.sleep(2)
+        rigid.handover_location.position.y *= -1.0
+        rigid.test.position.y *= -1.0
+        iter += 1
+        if iter == 2:
+            break
+    # HD = ArucoDetection()
+    # while True:
+    #     t,r = HD.loop()
+    #     if t is not None and r is not None:
+    #         p = Pose()
+    #         p.position.x = float(f'{t[0]:.3f}')
+    #         p.position.y = float(f'{t[1]:.3f}')
+    #         p.position.z = -0.30#t[2]
+    #         p.orientation.x = 1.0 #float(r.x)
+    #         p.orientation.y = 0.0 #float(r.y)
+    #         p.orientation.z = 0.0 #float(r.z)
+    #         p.orientation.w = 0.0 #float(r.w)
+    #         client.transfer([p])
+    #         input("Press Enter to continue...")
+    exit()
     time.sleep(1)
+    # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client)])
     result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'box', client), ('handover', 'robot', 'human', 'screwdriver', client)])
     # result = gtpyhop.find_plan(state1, [('deliver_objects', 'robot', ['brick1', 'brick6', 'brick4', 'brick3', 'brick2', 'brick5'], client)])
 

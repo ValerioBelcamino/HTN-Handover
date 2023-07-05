@@ -65,6 +65,15 @@ rigid.test.orientation.y = 0.0
 rigid.test.orientation.z = 0.0
 rigid.test.orientation.w = 0.0
 
+# rigid.test = Pose()
+# rigid.test.position.x = 0.67
+# rigid.test.position.y = -0.2
+# rigid.test.position.z = -0.31 #-0.22
+# rigid.test.orientation.x = 1.0
+# rigid.test.orientation.y = 0.0
+# rigid.test.orientation.z = 0.0
+# rigid.test.orientation.w = 0.0
+
 rigid.workspace = Pose()
 rigid.workspace.position.x = 0.52+0.10
 rigid.workspace.position.y = -0.31+0.10

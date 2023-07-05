@@ -82,9 +82,9 @@ class TrajectoryClient():
         if msg.data:
             self.traj_p.open_gripper()
 
-    def execute_trajectory(self, trajectory):
+    def execute_trajectory(self, trajectory, side):
 
-        traj = Trajectory(self.limb)
+        traj = Trajectory(side)
 
         rospy.on_shutdown(traj.stop)
         # Command Current Joint Positions first
@@ -103,16 +103,22 @@ class TrajectoryClient():
 
     def transfer(self, poses):
         failures = False
+        side = None
+        if poses[0].position.y > 0:
+            side = 'left'
+        else:
+            side = 'right'
         for pose in poses:
             rospy.logerr("Transfer function called")
             rospy.logerr(pose)
+            rospy.logerr(side)
             temp_pose = deepcopy(pose)
             #reach XY location above object
-            simple_traj, fract = self.traj_p.plan_cartesian_trajectory(temp_pose)
+            simple_traj, fract = self.traj_p.plan_cartesian_trajectory(temp_pose, side)
             
             print('fraction', fract)
-            if fract > 0.90:
-                self.execute_trajectory(simple_traj)
+            if fract > 0.95:
+                self.execute_trajectory(simple_traj, side)
             else:
                 rospy.logerr(fract)
                 failures = True

@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <launch>     
 
-  <arg name="port1"           	     default="/dev/ttyACM0" />
+  <arg name="port1"           	     default="/dev/ttyACM1" />
 
   <node name="gripper_action_server" pkg="baxter_interface" type="gripper_action_server.py" output="log" />
   <node name="joint_action_server_right" pkg="baxter_interface" type="joint_trajectory_action_server.py" args="--limb right --mode velocity" required="true" output="log"/>
+    <node name="joint_action_server_left" pkg="baxter_interface" type="joint_trajectory_action_server.py" args="--limb left --mode velocity" required="true" output="log"/>
   
   <!-- Run the Joint Trajectory Action -->
 
@@ -16,9 +17,9 @@
   <include file="$(find baxter_moveit)/launch/moveit_config.launch" />    
   
   <!-- Recording Tactile Sensor-->
-	<node pkg="melexis"  type="melexis_driver.py"  name="melexis_driver1" output="screen" respawn="false"    launch-prefix=""  required="true">
+<!--	<node pkg="melexis"  type="melexis_driver.py"  name="melexis_driver1" output="screen" respawn="false"    launch-prefix=""  required="true">
 		<param name="port"                value="$(arg port1)"/>  
-	</node>
+	</node>-->
 	
 
   <!-- Camera Listener -->

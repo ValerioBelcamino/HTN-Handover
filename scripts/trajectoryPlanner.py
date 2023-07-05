@@ -53,11 +53,14 @@ class TrajectoryPlanner():
         self.limb = "right"
         self.group_name = 'right_arm'
         self.publisher = rospy.Publisher('/right_arm/baxter_moveit_trajectory', MoveitTrajectory, queue_size=10)
-        self.move_group = moveit_commander.MoveGroupCommander(self.group_name)
+        self.move_group_right = moveit_commander.MoveGroupCommander('right_arm')
+        self.move_group_left = moveit_commander.MoveGroupCommander('left_arm')
         self.get_planning_scene_srv = rospy.ServiceProxy('/get_planning_scene', GetPlanningScene)
         self.obstacles = HandObstacleHandler()
-        gripper_topic = "robot/end_effector/" + self.limb + "_gripper/gripper_action/goal"
-        self.gripper_publisher = rospy.Publisher(gripper_topic, GripperCommandActionGoal, queue_size=10)
+        gripper_topic_right = "robot/end_effector/right_gripper/gripper_action/goal"
+        gripper_topic_left = "robot/end_effector/left_gripper/gripper_action/goal"
+        self.gripper_publisher_right = rospy.Publisher(gripper_topic_right, GripperCommandActionGoal, queue_size=10)
+        self.gripper_publisher_left = rospy.Publisher(gripper_topic_left, GripperCommandActionGoal, queue_size=10)
         # self.obstacles.add_hand()
         self.obstacles.add_table()
         # self.obstacles.add_wall()
@@ -83,7 +86,8 @@ class TrajectoryPlanner():
         current_joint_state.name = joint_names
         current_joint_state.position = start_joint_angles
 
-        self.move_group.set_start_state_to_current_state()
+        self.move_group_right.set_start_state_to_current_state()
+        self.move_group_left.set_start_state_to_current_state()
         # self.obstacles.add_hand()
 
 
@@ -95,10 +99,15 @@ class TrajectoryPlanner():
         return simple_traj, fract
 
 
-    def plan_cartesian_trajectory(self, destination_pose):#, start_joint_angles):
+    def plan_cartesian_trajectory(self, destination_pose, side):#, start_joint_angles):
+        mg = None
+        if side == 'right':
+            mg = self.move_group_right
+        elif side == 'left':
+            mg = self.move_group_left
         
-        (plan, fraction) = self.move_group.compute_cartesian_path([destination_pose], 0.01, 0.0) #TODO MAX STEP
-        self.move_group.set_pose_target(destination_pose)
+        (plan, fraction) = mg.compute_cartesian_path([destination_pose], 0.01, 0.0) #TODO MAX STEP
+        # mg.set_pose_target(destination_pose)
         # plan = self.move_group.plan()
 
         # fraction = 1.0
@@ -211,17 +220,23 @@ class TrajectoryPlanner():
 
             self.f = open(file, "w")
 
-    def open_gripper(self): 
+    def open_gripper(self, side): 
         # sleep(1)
         gripperCommandMsg = GripperCommandActionGoal()
         gripperCommandMsg.goal.command.position = 100.0
-        self.gripper_publisher.publish(gripperCommandMsg)
+        if side == 'right': 
+            self.gripper_publisher_right.publish(gripperCommandMsg)
+        elif side == 'left':
+            self.gripper_publisher_left.publish(gripperCommandMsg)
     
-    def close_gripper(self):
+    def close_gripper(self, side):
         sleep(1)
         gripperCommandMsg = GripperCommandActionGoal()
         gripperCommandMsg.goal.command.position = 15
-        self.gripper_publisher.publish(gripperCommandMsg)
+        if side == 'right': 
+            self.gripper_publisher_right.publish(gripperCommandMsg)
+        elif side == 'left':
+            self.gripper_publisher_left.publish(gripperCommandMsg)
 
         
 
