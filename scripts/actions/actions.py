@@ -46,19 +46,38 @@ def wait_empty_box(state, traj_client):
         traj_client.stop_sleeping_sig.wait()
         state.box_empty = True
         return state
+    
+def wait_tool_pulling(state, agent, traj_client):
+    if agent in state.agents:
+        if agent == 'robot':
+            if state.active_arm[agent] == 'right':
+                traj_client.melexis_activation_pub.publish(True)
+                if traj_client.stop_sleeping_sig.is_set():
+                    traj_client.stop_sleeping_sig.clear()
+                traj_client.stop_sleeping_sig.wait()
+                traj_client.traj_p.open_gripper('right')
+            elif state.active_arm[agent] == 'left':
+                traj_client.traj_p.open_gripper('left')
+    return state
 
 def release(state, agent, obj, traj_client):
     if agent in state.agents and obj in state.objects and state.holding[agent] == obj:
         if agent == 'robot':
-            if state.at[agent] == 'exchange point':
-                if state.active_arm[agent] == 'right':
-                    traj_client.melexis_activation_pub.publish(True)
-                    if traj_client.stop_sleeping_sig.is_set():
-                        traj_client.stop_sleeping_sig.clear()
-                    traj_client.stop_sleeping_sig.wait()
-                # TO TEST
-                if state.active_arm[agent] == 'left':
-                    traj_client.traj_p.open_gripper(state.active_arm[agent])
+            # if state.holding[agent] != 'box':
+            #     if state.active_arm[agent] == 'right':
+            #         traj_client.melexis_activation_pub.publish(True)
+            #         if traj_client.stop_sleeping_sig.is_set():
+            #             traj_client.stop_sleeping_sig.clear()
+            #         traj_client.stop_sleeping_sig.wait()
+            #         traj_client.traj_p.open_gripper('right')
+
+            #     # TO TEST
+            #     if state.active_arm[agent] == 'left':
+            #         traj_client.traj_p.open_gripper(state.active_arm[agent])
+
+            # elif state.holding[agent] == 'box':
+            #     traj_client.traj_p.open_gripper(state.active_arm[agent])
+            traj_client.traj_p.open_gripper(state.active_arm[agent])
         state.holding[agent] = None
         return state 
 
@@ -116,4 +135,4 @@ def reset_active_arm(state, agent):
             state.active_arm[agent] = None
         return state
 
-gtpyhop.declare_actions(transfer, grasp, release, wait_empty_box, check_available_obj, choose_obj, choose_arm, reset_active_arm)
+gtpyhop.declare_actions(transfer, grasp, release, wait_tool_pulling, wait_empty_box, check_available_obj, choose_obj, choose_arm, reset_active_arm)

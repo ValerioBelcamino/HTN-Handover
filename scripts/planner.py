@@ -58,7 +58,9 @@ def main():
     client.traj_p.open_gripper('left')
     client.traj_p.open_gripper('right')
 
-    result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client), ('handover', 'robot', 'human', 'screwdriver2', client)])
+    # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'box', client)])
+    result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client)])
+    # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client), ('handover', 'robot', 'human', 'screwdriver2', client)])
 
     # iter = 0
     # while True:

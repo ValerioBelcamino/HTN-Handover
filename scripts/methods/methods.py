@@ -12,6 +12,7 @@ def exchange(state, agent1, agent2, obj, traj_client):
     if agent1 in state.agents and agent2 in state.agents and state.holding[agent1] == obj:
         if obj == 'screwdriver' or obj == 'screwdriver2':
             return[('grasp', agent2, obj, traj_client), 
+                ('wait_tool_pulling', agent1, traj_client),
                 ('release', agent1, obj, traj_client),
                 ('reset_active_arm', agent1)]
         elif obj == 'box':
