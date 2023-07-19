@@ -15,7 +15,7 @@ from control_msgs.msg import (
     FollowJointTrajectoryGoal,
     GripperCommandActionGoal
 )
-from std_msgs.msg import Bool, String
+from std_msgs.msg import Bool, String, Int32
 from trajectory_msgs.msg import (
     JointTrajectoryPoint,
 )
@@ -33,9 +33,11 @@ class TrajectoryClient():
         rospy.Subscriber("/right_arm/baxter_moveit_trajectory", MoveitTrajectory, self.callback)
         self.release_sub = rospy.Subscriber("/melexis_release", Bool, self.release_callback)
         self.aruco_objects = rospy.Subscriber("/aruco_detection", String, self.aruco_callback)
+        self.precision_marker_pose = rospy.Subscriber("/precise_marker_pose", Pose, self.precise_marker_pose_callback)
 
         self.melexis_activation_pub = rospy.Publisher("/melexis_activation", Bool, queue_size=10)
         self.camera_activation_pub = rospy.Publisher("/camera_listener_activation", Bool, queue_size=10)
+        self.baxter_camera_activation_pub = rospy.Publisher("/baxter_camera_listener_activation", Int32, queue_size=10)
         self.aruco_activation_pub = rospy.Publisher("/aruco_detection_activation", Bool, queue_size=10)
 
         self.trajTime = 6.0 # Time to complete each trajectory 
@@ -43,6 +45,7 @@ class TrajectoryClient():
         self.stop_sleeping_sig = Event()
 
         self.current_obj = []
+        self.precise_m_p = None
 
     def callback(self, msg):
 
@@ -67,6 +70,13 @@ class TrajectoryClient():
         
         self.ex_complete_pub.publish(True)
         print("Action Complete")
+
+    def precise_marker_pose_callback(self, msg):
+        rospy.loginfo("precise_marker_pose_callback called")
+        print(msg)
+        self.precise_m_p = msg
+        if not self.stop_sleeping_sig.is_set():
+            self.stop_sleeping_sig.set()
 
     def aruco_callback(self, msg):
         rospy.loginfo("aruco_callback")

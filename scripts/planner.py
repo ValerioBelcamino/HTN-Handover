@@ -59,7 +59,7 @@ def main():
     client.traj_p.open_gripper('right')
 
     # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'box', client)])
-    result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client)])
+    # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client)])
     # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client), ('handover', 'robot', 'human', 'screwdriver2', client)])
 
     # iter = 0
@@ -83,20 +83,54 @@ def main():
     #     iter += 1
     #     if iter == 4:
     #         break
-    # HD = ArucoDetection()
-    # while True:
-    #     t,r = HD.loop()
-    #     if t is not None and r is not None:
-    #         p = Pose()
-    #         p.position.x = float(f'{t[0]:.3f}')
-    #         p.position.y = float(f'{t[1]:.3f}')
-    #         p.position.z = -0.30#t[2]
-    #         p.orientation.x = 1.0 #float(r.x)
-    #         p.orientation.y = 0.0 #float(r.y)
-    #         p.orientation.z = 0.0 #float(r.z)
-    #         p.orientation.w = 0.0 #float(r.w)
-    #         client.transfer([p])
-    #         input("Press Enter to continue...")
+    HD = ArucoDetection()
+
+    tuck_pose = Pose()
+    tuck_pose.position.x = 0.38
+    tuck_pose.position.y = -0.43
+    tuck_pose.position.z = -0.20
+    tuck_pose.orientation.x = 1.0
+    tuck_pose.orientation.y = 0.0
+    tuck_pose.orientation.z = 0.0
+    tuck_pose.orientation.w = 0.0
+    client.transfer([tuck_pose], 'right')
+    # exit()  
+    while True:
+        dict = HD.loop()
+        id = random.choice(list(dict.keys()))
+        print(dict)
+        print(f'ID: {id}')
+        t, r = dict[id]
+        # t[2] += 0.04
+        print(f' trasl: {t} \nrot: {r}')
+        # input("Press Enter to continue...")
+        if t is not None and r is not None:
+            p = Pose()
+            p.position.x = float(f'{t[0]:.3f}')
+            p.position.y = float(f'{t[1]:.3f}')
+            p.position.z = float(f'{t[2]:.3f}')
+            if p.position.z < -0.32:
+                p.position.z = -0.32
+            p.position.z += 0.08
+            p.orientation.x = 1.0 #float(r.x)
+            p.orientation.y = 0.0 #float(r.y)
+            p.orientation.z = 0.0 #float(r.z)
+            p.orientation.w = 0.0 #float(r.w)
+            client.transfer([p], 'right')
+            pmp = precision_marker_detection(state1, client, id)
+            pmp.position.z -= 0.06
+            if pmp.position.z < -0.32:
+                pmp.position.z = -0.32
+            rospy.logwarn(pmp)
+            pmp.orientation.x = 1.0
+            pmp.orientation.y = 0.0
+            pmp.orientation.z = 0.0
+            pmp.orientation.w = 0.0
+            # input("Press Enter to continue...")
+            client.transfer([pmp], 'right')
+            client.transfer([p], 'right')
+            client.transfer([tuck_pose], 'right')
+            # input("Press Enter to continue...")
     exit()
     time.sleep(1)
     # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client)])

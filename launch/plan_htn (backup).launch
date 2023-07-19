@@ -3,8 +3,9 @@
 
   <arg name="port1"           	     default="/dev/ttyACM0" />
 
-  <node name="gripper_action_server" pkg="baxter_interface" type="gripper_action_server.py" output="screen" />
-  <node name="joint_action_server_right" pkg="baxter_interface" type="joint_trajectory_action_server.py" args="--limb right --mode velocity" required="true" />
+  <node name="gripper_action_server" pkg="baxter_interface" type="gripper_action_server.py" output="log" />
+  <node name="joint_action_server_right" pkg="baxter_interface" type="joint_trajectory_action_server.py" args="--limb right --mode velocity" required="true" output="log"/>
+    <node name="joint_action_server_left" pkg="baxter_interface" type="joint_trajectory_action_server.py" args="--limb left --mode velocity" required="true" output="log"/>
   
   <!-- Run the Joint Trajectory Action -->
 
@@ -17,12 +18,15 @@
   
   <!-- Recording Tactile Sensor-->
 	<node pkg="melexis"  type="melexis_driver.py"  name="melexis_driver1" output="screen" respawn="false"    launch-prefix=""  required="true">
-
 		<param name="port"                value="$(arg port1)"/>  
 	</node>
 	
 
-
+  <!-- Camera Listener -->
+  <node name="baxter_camera_listener" pkg="baxter_camera_listener" type="handoverDetector.py" output="screen" />  
+  <!-- ARUCO Listener -->
+  <node name="ARUCO_camera_listener" pkg="baxter_camera_listener" type="videoCapture.py" output="screen" />  
+  
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find baxter_moveit)/config/rviz_planning_scene.rviz" required="true" />
 
 </launch>
