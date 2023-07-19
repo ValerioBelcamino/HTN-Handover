@@ -1,22 +1,56 @@
+#!/usr/bin/env python
 import pyzed.sl as sl
 import cv2
 import numpy as np
 import quaternionic
 import rospy
-from std_msgs.msg import String, Bool
+from std_msgs.msg import  Bool
+from geometry_msgs.msg import Pose, PoseArray
 
 
 
 class ArucoDetection():
     def __init__(self):
-        # rospy.init_node('camera_listener', anonymous=True)
-        # self.image_sub = rospy.Subscriber("/aruco_detection_activation", Bool, self.loop)
-        # self.obj_pub = rospy.Publisher("/aruco_detection", String, queue_size=10)
+        rospy.init_node('zed2_pose_estimation', anonymous=True)
+        
+        self.obj_pub = rospy.Publisher("/aruco_detection", PoseArray, queue_size=10)
         self.trasl_list = []
         self.scene_markers = [100, 10, 0]
         self.smoothing_dict = {}
         self.smoothing_window = 50
+        self.static_rot = np.asarray([
+            [0.0, 1.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 0.0, -1.0]
+        ])
 
+        
+        self.baxter2ref = np.asarray([[0.999, 0.008, 0.033, 0.658],
+                                [0.012, -0.994, -0.113, -0.000],
+                                [0.032, 0.113, -0.993, -0.280],
+                                [0.000, 0.000, 0.000, 1.000]])
+
+
+        self.logi2ref = np.load("/home/index1/index_ws/src/zed_cv2/cam2ref.npy")
+        np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
+        self.calibration_matrix_path = "/home/index1/index_ws/src/zed_cv2/zed2_calibration_matrix.npy"
+        self.calibration_matrix = np.load(self.calibration_matrix_path)   
+
+        self.distortion_path = "/home/index1/index_ws/src/zed_cv2/zed2_distortion.npy"
+        self.distortion = np.load(self.distortion_path)
+
+        print('\n',self.distortion)
+
+        self.arucoDict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250) #cv2.aruco.DICT_ARUCO_ORIGINAL
+        self.arucoParams = cv2.aruco.DetectorParameters()
+        self.arucoDetector = cv2.aruco.ArucoDetector(self.arucoDict, self.arucoParams)
+
+        self.zed, self.image_size, self.image_zed, self.depth_zed = self.init_zed(sl.RESOLUTION.HD2K)
+
+    def listener(self):
+        self.image_sub = rospy.Subscriber("/aruco_detection_activation", Bool, self.loop)
+        # self.loop()
+        rospy.spin()
 
     def tf2quat_tr(self, tf):
         quat = quaternionic.array.from_rotation_matrix(tf[:3, :3])
@@ -160,63 +194,20 @@ class ArucoDetection():
 
 
 
-    def loop(self):
-
-        static_rot = np.asarray([
-            [0.0, 1.0, 0.0],
-            [1.0, 0.0, 0.0],
-            [0.0, 0.0, -1.0]
-        ])
-
-        # baxter2ref = np.asarray([   [ 1.0,  0.0,  0.0,  0.668],
-        #                             [ 0.0, -1.0, -0.0, -0.245],
-        #                             [-0.0,  0.0, -1.0, -0.324],
-        #                             [ 0.0,          0.0,          0.0,          1.0        ]])
-        
-        baxter2ref = np.asarray([[0.999, 0.008, 0.033, 0.658],
-                                [0.012, -0.994, -0.113, -0.000],
-                                [0.032, 0.113, -0.993, -0.280],
-                                [0.000, 0.000, 0.000, 1.000]])
-        # baxter2ref[2,3] += 0.04
-
-
-        logi2ref = np.load("/home/index1/index_ws/src/zed_cv2/cam2ref.npy")
-        np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-        calibration_matrix_path = "/home/index1/index_ws/src/zed_cv2/zed2_calibration_matrix.npy"
-        calibration_matrix = np.load(calibration_matrix_path)   
-
-        distortion_path = "/home/index1/index_ws/src/zed_cv2/zed2_distortion.npy"
-        distortion = np.load(distortion_path)
-
-        print('\n',distortion)
-
-        arucoDict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250) #cv2.aruco.DICT_ARUCO_ORIGINAL
-        arucoParams = cv2.aruco.DetectorParameters()
-        arucoDetector = cv2.aruco.ArucoDetector(arucoDict, arucoParams)
-
-        # cap = cv2.VideoCapture(0)
-
-        # #resolution stuff
-        # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-        # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
-        # width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-        # height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        # print(width, height)
-
-        zed, image_size, image_zed, depth_zed = self.init_zed(sl.RESOLUTION.HD2K)
-
+    def loop(self, msg):
+        rospy.loginfo("I am listening to the camera")
         # print(zed.get_camera_information())
         real_ids = []
         iterations = 0
 
         while iterations<30:
             # ret, image_ocv = cap.read()
-            image_ocv, depth_map = self.grab_zed_frame(zed, image_size, depth_zed, image_zed)
+            image_ocv, depth_map = self.grab_zed_frame(self.zed, self.image_size, self.depth_zed, self.image_zed)
             depth_map_resize = cv2.resize(depth_map, (1280, 720))
             cv2.imshow("depth_map", depth_map_resize)
             # Display the left image from the numpy array
             image_ocv_grey = cv2.cvtColor(image_ocv, cv2.COLOR_BGR2GRAY)
-            corners, ids, rejected = arucoDetector.detectMarkers(image_ocv_grey)
+            corners, ids, rejected = self.arucoDetector.detectMarkers(image_ocv_grey)
             criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.001)
 
             refined_corners = []
@@ -229,7 +220,7 @@ class ArucoDetection():
             #             real_ids.append(id)
     
             # rvec, tvec, _ = self.estimatePoseSingleMarkers(corners, 0.25, calibration_matrix, distortion)
-            rvec, tvec, _ = self.estimatePoseSingleMarkers(refined_corners, 0.056, calibration_matrix, distortion, depth_map)
+            rvec, tvec, _ = self.estimatePoseSingleMarkers(refined_corners, 0.056, self.calibration_matrix, self.distortion, depth_map)
             
             # self.trasl_list.append(tvec)
             # tvec = self.moving_average_filter(tvec, self.trasl_list, 10)
@@ -254,77 +245,37 @@ class ArucoDetection():
                         if len(row_idx[0]) != 0:
                             row_idx = row_idx[0][0]
                             ref_rot = rod[row_idx]
-                            ref_rot = np.dot(ref_rot, static_rot)
+                            ref_rot = np.dot(ref_rot, self.static_rot)
                             rvec[row_idx] = cv2.Rodrigues(ref_rot)[0]
                             ref_trasl = smoothed_traslations[row_idx]
                             ref_tf = self.get_transform_matrix(ref_rot, ref_trasl)
-                            trasl, r = self.tf2quat_tr(np.dot(baxter2ref, np.dot(np.linalg.inv(logi2ref), ref_tf)))
-                            print(f'ID: {id}, trasl: {trasl}, rot: {r.normalized}')
-                            pose_dict[id[0]] = [trasl, r.normalized]
-                        print('-----------------')
-                print(pose_dict)
+                            trasl, r = self.tf2quat_tr(np.dot(self.baxter2ref, np.dot(np.linalg.inv(self.logi2ref), ref_tf)))
+                            # print(f'ID: {id}, trasl: {trasl}, rot: {r.normalized}')
+                            r = r.normalized
+                            p = Pose()
+                            p.position.x = trasl[0]
+                            p.position.y = trasl[1]
+                            p.position.z = trasl[2] + 0.08
+                            p.orientation.x = 1.0#r.ndarray[1]
+                            p.orientation.y = 0.0#r.ndarray[2]
+                            p.orientation.z = 0.0#r.ndarray[3]
+                            p.orientation.w = 0.0#r.ndarray[0]
+                            pose_dict[id[0]] = p#[trasl, r.normalized]
+                        # print('-----------------')
                 iterations += 1
                 if iterations == 30-1:
                     if pose_dict:
-                        return pose_dict
+                        pose_array_msg = PoseArray()
+                        pose_array_msg.header.frame_id = '_'.join([str(id) for id in pose_dict.keys()]) #0_10_100 [pose1, pose2, pose3]
+                        pose_array_msg.header.stamp = rospy.Time.now()
+                        for key in pose_dict.keys():
+                            pose_array_msg.poses.append(pose_dict[key])
+                        self.obj_pub.publish(pose_array_msg)
+                        rospy.loginfo(pose_array_msg)
+                        return pose_dict #[]
                     else:
                         iterations = 0
 
-            # if len(ref_row[0]) != 0:
-            #     ref_row = ref_row[0][0]
-
-
-            #     ref_rot = rod[ref_row]
-            #     ref_rot = np.dot(ref_rot, static_rot)
-            #     rvec[ref_row] = cv2.Rodrigues(ref_rot)[0]
-            #     ref_trasl = tvec[ref_row]
-
-
-            #     ref_tf = self.get_transform_matrix(ref_rot, ref_trasl)
-            #     print(ref_tf)
-            #     # bax2obj = np.dot(baxter2camera, ref_tf)
-            #     # print(bax2obj)
-            #     # trasl, r = self.tf2quat_tr(np.dot(np.linalg.inv(logi2ref), ref_tf))
-            #     # print(np.dot(np.linalg.inv(logi2ref), ref_tf))
-            #     # print(trasl)
-            #     # print(r)
-
-            #     trasl, r = self.tf2quat_tr(np.dot(baxter2ref, np.dot(np.linalg.inv(logi2ref), ref_tf)))
-            #     # print(np.dot(baxter2ref, np.dot(np.linalg.inv(logi2ref), ref_tf)))
-            #     # print(trasl)
-            #     # print(r)
-
-            #     # return trasl, r.normalized
-            #     # print(np.dot(baxter2ref, np.linalg.inv(logi2ref)))
-            #     # print(np.dot(np.linalg.inv(logi2ref), ref_tf))
-            #     # np.save('/home/index1/index_ws/src/zed_cv2/logi2ref.npy', ref_tf)
-            #     # pos_tf = get_transform_matrix(pos_rot, pos_trasl)
-            #     # np.set_printoptions(formatter={'float': lambda x: "{0:0.2f}".format(x)})
-            #     # ref_to_pos_tf = np.dot(np.linalg.inv(ref_tf), pos_tf)
-
-            #     # print(ref_to_pos_tf)
-
-            # # for c in rod:
-            # #     print(c)
-            # # # print(rvec)
-            # # print(tvec)
-            # # print('--------------')
-            # quats = []
-            # # for i in range(len(rvec)):
-            # #     # q = quaternionic.array.from_euler_angles(rvec[i][0], rvec[i][1], rvec[i][2])
-            # #     # quats.append(q)
-            # #     # print(f'w: {quats[i].w}, x: {quats[i].x}, y: {quats[i].y}, z: {quats[i].z}')
-            # #     print(f'w: {rvec[i][0]}, x: {rvec[i][1]}, y: {rvec[i][2]}, z: {rvec[i][3]}')
-            # # print(quats)
-            # if ids is not None: print(len(ids))
-            # image_ocv = self.aruco_display(corners, ids, rejected, image_ocv)
-            # # print(rvec.shape)
-            # # print(tvec.shape)
-
-            # if tvec.shape[0] > 0 and rvec.shape[0] > 0:
-            #     for j in range(tvec.shape[0]):
-            #         cv2.drawFrameAxes(image_ocv, calibration_matrix, distortion, rvec[j], tvec[j], 0.1) 
-                    
             image_resize = cv2.resize(image_ocv, (1280, 720))
             cv2.imshow("Image", image_resize)
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -332,11 +283,12 @@ class ArucoDetection():
         self.obj_pub.publish('_'.join([str(id) for id in real_ids]))
         cv2.destroyAllWindows()
 
-    def listener(self):
-        rospy.loginfo("I am listening to the camera")
-        # spin() simply keeps python from exiting until this node is stopped
-        rospy.spin()
+    # def listener(self):
+    #     rospy.loginfo("I am listening to the camera")
+    #     # spin() simply keeps python from exiting until this node is stopped
+    #     rospy.spin()
 
 if __name__ == '__main__':
     HD = ArucoDetection()
-    HD.loop()
+    HD.listener()
+    # HD.loop()

@@ -7,11 +7,14 @@ state.box_empty = False
 state.obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': state.box_empty}
 state.active_arm = {'human': None, 'robot': None}
 
+state.markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
+# state.obj2pose = {'brick1': pose}
+
 # for deliver_objects method
 state.available_objects = []
 state.selected_object = None
 
-state.locations = {'table', 'table2', 'exchange point', 'X', 'Y', 'workspace'}
+state.locations = {'table', 'table2', 'exchange point', 'X', 'Y', 'workspace', 'brick1_pose', 'brick2_pose', 'brick3_pose'}
 state.agents = {'human', 'robot'}
 
 
@@ -23,9 +26,9 @@ state.at = {'box': 'table',
             'robot': 'Y',
             'left': 'Y',
             'right': 'Y',
-            'brick1': 'table', 
-            'brick6': 'table', 
+            'brick1': 'brick1_pose', 
+            'brick2': 'brick2_pose', 
+            'brick3': 'brick3_pose', 
+            'brick6': 'brick2', 
             'brick4': 'table', 
-            'brick3': 'table', 
-            'brick2': 'table', 
             'brick5': 'table'}

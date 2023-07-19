@@ -22,7 +22,7 @@
     <!-- Camera Listener -->
   <node name="baxter_camera_aruco" pkg="baxter_moveit" type="baxter_camera_aruco.py" output="screen" /> 
   <!-- ARUCO Listener -->
-  <node name="ARUCO_camera_listener" pkg="baxter_camera_listener" type="videoCapture.py" output="screen" />  
+  <node name="zed2_pose_estimation" pkg="baxter_moveit" type="zed2_pose_estimation.py" output="screen" />  
   
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find baxter_moveit)/config/rviz_planning_scene.rviz" required="true" />
 

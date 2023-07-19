@@ -17,11 +17,20 @@ def transfer(state, agent, loc_to, traj_client):
                     return None
             if not traj_client.transfer(loc_to_pose, state.active_arm[agent]):
                 return None
+            
+            # here we should call the wrist camera
+            # get the precise position of the object
+            # call again transfer
+            # we will have something like --- brick1_pose': [pose1] from the previous methods
+            # so we have to add the precise pose in the second position of the list
+            # brick1_pose': [pose1, precise],
+
         state.at[agent] = loc_to
         state.at[state.active_arm[agent]] = loc_to
         if state.holding[agent]:
             obj = state.holding[agent]
             state.at[obj] = loc_to
+ 
         return state
 
 def grasp(state, agent, obj, traj_client):
@@ -99,11 +108,22 @@ def check_available_obj(state, obj_list, traj_client):
         traj_client.stop_sleeping_sig.wait()
         if len(traj_client.current_obj) == 1 and traj_client.current_obj[0] == '':
             traj_client.current_obj = []
+            traj_client.active_marker_poses = {}
         
-        # dict =  {obj1: pos1, obj2: pos2}
+        state.available_objects = []
+        # dict =  {0: pos1, 10: pos2, 100: pos3}
+        # listofnames = ['brick1', 'brick2', 'brick3']
+        print('available markers: ', traj_client.current_obj)
+        print('active_marker_poses: ', traj_client.active_marker_poses)
+        print('state.available_objects: ', state.available_objects)
+        for obj_marker_id in traj_client.current_obj:
+            if state.markerID2obj[obj_marker_id] not in state.available_objects:
+                state.available_objects.append(state.markerID2obj[obj_marker_id])
+            rigid.locations[state.markerID2obj[obj_marker_id] + '_pose'] = [traj_client.active_marker_poses[obj_marker_id]]
+            state.at[state.markerID2obj[obj_marker_id]] = state.markerID2obj[obj_marker_id] + '_pose'
 
-        print('available objects: ', traj_client.current_obj)
-        state.available_objects = traj_client.current_obj
+        print('available objects: ', state.available_objects)
+        print('obj2pose: ', rigid.locations)
         # state.available_objects = dict.keys()
         # for k in dict.keys():
         #     state.at[k] = dict[k]

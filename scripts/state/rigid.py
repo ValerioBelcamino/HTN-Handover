@@ -112,10 +112,15 @@ rigid.workspace2.orientation.y = 0.0
 rigid.workspace2.orientation.z = 0.0
 rigid.workspace2.orientation.w = 0.0
 
+
+
 rigid.locations = {'table': [rigid.screwdriver_pose, rigid.screwdriver_pose2], 
                    'table2': [rigid.screwdriver_poseTMP, rigid.screwdriver_pose2TMP], 
                    'exchange point': [rigid.handover_location],
                     'X': [rigid.X],
                     'Y': [rigid.Y],
                     'test': [rigid.test],
-                    'workspace': [rigid.workspace, rigid.workspace2]} #place in front of the human where he assembles the chair
+                    'workspace': [rigid.workspace, rigid.workspace2],
+                    'brick1_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
+                    'brick2_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
+                    'brick3_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2]} #place in front of the human where he assembles the chair

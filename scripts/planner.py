@@ -6,7 +6,7 @@ from joint_trajectory_client import TrajectoryClient
 import baxter_interface
 from baxter_interface import CHECK_VERSION
 import argparse
-from logitech_pose_estimation import ArucoDetection
+from zed2_pose_estimation import ArucoDetection
 from geometry_msgs.msg import Pose
 
 domain = gtpyhop.Domain('handover')
@@ -58,6 +58,8 @@ def main():
     client.traj_p.open_gripper('left')
     client.traj_p.open_gripper('right')
 
+    result = gtpyhop.find_plan(state1, [('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3'], client)])
+    exit()
     # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'box', client)])
     # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client)])
     # result = gtpyhop.find_plan(state1, [('handover', 'robot', 'human', 'screwdriver', client), ('handover', 'robot', 'human', 'screwdriver2', client)])

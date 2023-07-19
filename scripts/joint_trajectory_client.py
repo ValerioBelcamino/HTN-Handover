@@ -15,11 +15,11 @@ from control_msgs.msg import (
     FollowJointTrajectoryGoal,
     GripperCommandActionGoal
 )
-from std_msgs.msg import Bool, String, Int32
+from std_msgs.msg import Bool, Int32
 from trajectory_msgs.msg import (
     JointTrajectoryPoint,
 )
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, PoseArray
 
 from baxter_moveit.msg import MoveitTrajectory
 
@@ -32,7 +32,7 @@ class TrajectoryClient():
         self.limb = limb
         rospy.Subscriber("/right_arm/baxter_moveit_trajectory", MoveitTrajectory, self.callback)
         self.release_sub = rospy.Subscriber("/melexis_release", Bool, self.release_callback)
-        self.aruco_objects = rospy.Subscriber("/aruco_detection", String, self.aruco_callback)
+        self.aruco_objects = rospy.Subscriber("/aruco_detection", PoseArray, self.aruco_callback)
         self.precision_marker_pose = rospy.Subscriber("/precise_marker_pose", Pose, self.precise_marker_pose_callback)
 
         self.melexis_activation_pub = rospy.Publisher("/melexis_activation", Bool, queue_size=10)
@@ -45,6 +45,7 @@ class TrajectoryClient():
         self.stop_sleeping_sig = Event()
 
         self.current_obj = []
+        self.active_marker_poses = {}
         self.precise_m_p = None
 
     def callback(self, msg):
@@ -81,7 +82,10 @@ class TrajectoryClient():
     def aruco_callback(self, msg):
         rospy.loginfo("aruco_callback")
         print(msg)
-        self.current_obj = msg.data.split('_')
+        
+        self.current_obj = msg.header.frame_id.split('_')
+        for i, mid in enumerate(self.current_obj):
+            self.active_marker_poses[mid] = msg.poses[i]
         if not self.stop_sleeping_sig.is_set():
             self.stop_sleeping_sig.set()
 
