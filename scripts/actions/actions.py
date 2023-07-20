@@ -1,6 +1,7 @@
 import gtpyhop
 import time 
 import random
+import rospy
 from state.rigid import rigid
 
 def transfer(state, agent, loc_to, traj_client):
@@ -24,14 +25,37 @@ def transfer(state, agent, loc_to, traj_client):
             # we will have something like --- brick1_pose': [pose1] from the previous methods
             # so we have to add the precise pose in the second position of the list
             # brick1_pose': [pose1, precise],
+            if state.selected_object:
+                if 'brick' in state.selected_object and loc_to != 'workspace':
+                    print('selected_object: ', state.selected_object)
+                    selected_marker_id = int(state.obj2markerID[state.selected_object])
+                    precise_pose = precision_marker_detection(state, traj_client, selected_marker_id)
+                    print(precise_pose)
+                    rigid.locations[state.selected_object + '_pose'].append(precise_pose)
+                    print('new location for ', state.selected_object, ' is: ', rigid.locations[state.selected_object + '_pose'])
+                    if not traj_client.transfer([precise_pose], state.active_arm[agent]):
+                        return None
 
         state.at[agent] = loc_to
         state.at[state.active_arm[agent]] = loc_to
         if state.holding[agent]:
             obj = state.holding[agent]
             state.at[obj] = loc_to
- 
         return state
+    
+
+def tuck_arms(state, agent, traj_client):
+    if agent in state.agents and not state.holding[agent]:
+        state.at[agent] = 'tuck_positionR'
+        state.at['left'] = 'tuck_positionL'
+        state.at['right'] = 'tuck_positionR'
+
+        if not traj_client.transfer([rigid.locations['tuck_positionR'][0]], 'right'):
+            return None 
+        if not traj_client.transfer([rigid.locations['tuck_positionL'][0]], 'left'):
+            return None
+    return state
+
 
 def grasp(state, agent, obj, traj_client):
     if agent in state.agents and obj in state.objects and state.at[agent] == state.at[obj]: #and not state.holding[agent]:
@@ -151,8 +175,15 @@ def choose_arm(state, obj, agent):
             loc = state.at[obj]
             if rigid.locations[loc][0].position.y > 0:
                 state.active_arm[agent] = 'left'
+                # rospy.logwarn('Choosing left arm')
+                # rospy.logwarn(loc)
+                # rospy.logwarn(rigid.locations[loc][0].position)
             else:
                 state.active_arm[agent] = 'right'
+                # rospy.logwarn('Choosing right arm')
+                # rospy.logwarn(loc)
+                # rospy.logwarn(rigid.locations[loc][0].position)
+
             state.at[agent] = state.at[state.active_arm[agent]]
         return state
     
@@ -163,5 +194,19 @@ def reset_active_arm(state, agent):
         elif agent == 'robot':
             state.active_arm[agent] = None
         return state
+    
+def reset_selected_object(state):
+    state.selected_object = None
+    return state
 
-gtpyhop.declare_actions(transfer, grasp, release, wait_tool_pulling, wait_empty_box, check_available_obj, choose_obj, choose_arm, reset_active_arm)
+gtpyhop.declare_actions(transfer, 
+                        grasp, 
+                        release, 
+                        wait_tool_pulling, 
+                        wait_empty_box, 
+                        check_available_obj,
+                        choose_obj, 
+                        choose_arm, 
+                        reset_active_arm, 
+                        reset_selected_object,
+                        tuck_arms)

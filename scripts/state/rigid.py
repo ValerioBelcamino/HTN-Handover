@@ -1,53 +1,167 @@
 from gtpyhop import State
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Pose, Point, Quaternion
 from copy import copy
 
 rigid = State("rigid")
 
-rigid.screwdriver_pose = Pose()
-rigid.screwdriver_pose.position.x = 0.52 - 0.06
-rigid.screwdriver_pose.position.y = -0.31 
-rigid.screwdriver_pose.position.z = -0.20 #-0.22
-rigid.screwdriver_pose.orientation.x = 1.0
-rigid.screwdriver_pose.orientation.y = 0.0
-rigid.screwdriver_pose.orientation.z = 0.0
-rigid.screwdriver_pose.orientation.w = 0.0
 
-rigid.screwdriver_pose2 = Pose()
-rigid.screwdriver_pose2.position.x = 0.52
-rigid.screwdriver_pose2.position.y = -0.31
-rigid.screwdriver_pose2.position.z = -0.32
-rigid.screwdriver_pose2.orientation.x = 1.0
-rigid.screwdriver_pose2.orientation.y = 0.0
-rigid.screwdriver_pose2.orientation.z = 0.0
-rigid.screwdriver_pose2.orientation.w = 0.0
 
-rigid.screwdriver_poseTMP = Pose()
-rigid.screwdriver_poseTMP.position.x = 0.52 - 0.06
-rigid.screwdriver_poseTMP.position.y = 0.31 
-rigid.screwdriver_poseTMP.position.z = -0.20 #-0.22
-rigid.screwdriver_poseTMP.orientation.x = 1.0
-rigid.screwdriver_poseTMP.orientation.y = 0.0
-rigid.screwdriver_poseTMP.orientation.z = 0.0
-rigid.screwdriver_poseTMP.orientation.w = 0.0
+rigid.screwdriver_pose = Pose(
+    Point(
+        x = 0.46,
+        y = -0.31 ,
+        z = -0.20 #-0.22,
+    ),
+    Quaternion(
+        x = 1.0,
+        y = 0.0,
+        z = 0.0,
+        w = 0.0
+    )
+)
 
-rigid.screwdriver_pose2TMP = Pose()
-rigid.screwdriver_pose2TMP.position.x = 0.52
-rigid.screwdriver_pose2TMP.position.y = 0.31
-rigid.screwdriver_pose2TMP.position.z = -0.32
-rigid.screwdriver_pose2TMP.orientation.x = 1.0
-rigid.screwdriver_pose2TMP.orientation.y = 0.0
-rigid.screwdriver_pose2TMP.orientation.z = 0.0
-rigid.screwdriver_pose2TMP.orientation.w = 0.0
+rigid.screwdriver_pose2 = Pose(
+    Point(
+        x = 0.52,
+        y = -0.31 ,
+        z = -0.32 #-0.22,
+    ),
+    Quaternion(
+        x = 1.0,
+        y = 0.0,
+        z = 0.0,
+        w = 0.0
+    )
+)
 
-rigid.handover_location = Pose()
-rigid.handover_location.position.x = 0.82
-rigid.handover_location.position.y = -0.23
-rigid.handover_location.position.z = 0.16
-rigid.handover_location.orientation.x = 1.0
-rigid.handover_location.orientation.y = 0.0
-rigid.handover_location.orientation.z = 0.0
-rigid.handover_location.orientation.w = 0.0
+
+rigid.handover_location = Pose(
+    Point(
+        x = 0.82,
+        y = -0.23 ,
+        z = 0.16,
+    ),
+    Quaternion(
+        x = 1.0,
+        y = 0.0,
+        z = 0.0,
+        w = 0.0
+    )
+)
+
+rigid.X = Pose(
+    Point(
+        x = 0.55,
+        y = -0.77 ,
+        z = 0.046,
+    ),
+    Quaternion(
+        x = 1.0,
+        y = 0.0,
+        z = 0.0,
+        w = 0.0
+    )
+)
+
+
+rigid.Y = copy(rigid.X)
+
+rigid.workspace = Pose(
+    Point(
+        x = 0.62,
+        y = -0.11 ,
+        z = -0.20,
+    ),
+    Quaternion(
+        x = 1.0,
+        y = 0.0,
+        z = 0.0,
+        w = 0.0
+    )
+)
+
+rigid.workspace2 = Pose(
+    Point(
+        x = 0.62,
+        y = -0.11 ,
+        z = -0.32,
+    ),
+    Quaternion(
+        x = 1.0,
+        y = 0.0,
+        z = 0.0,
+        w = 0.0
+    )
+)
+
+
+rigid.tuck_poseR = Pose(
+    Point(
+        x = 0.38,
+        y = -0.43,
+        z = -0.20,
+    ),
+    Quaternion(
+        x = 1.0,
+        y = 0.0,
+        z = 0.0,
+        w = 0.0
+    )
+)
+
+rigid.tuck_poseL = Pose(
+    Point(
+        x = 0.38,
+        y = 0.43,
+        z = -0.20,
+    ),
+    Quaternion(
+        x = 1.0,
+        y = 0.0,
+        z = 0.0,
+        w = 0.0
+    )
+)
+
+
+
+
+# rigid.screwdriver_pose.position.x = 0.52 - 0.06
+# rigid.screwdriver_pose.position.y = -0.31 
+# rigid.screwdriver_pose.position.z = -0.20 #-0.22
+# rigid.screwdriver_pose.orientation.x = 1.0
+# rigid.screwdriver_pose.orientation.y = 0.0
+# rigid.screwdriver_pose.orientation.z = 0.0
+# rigid.screwdriver_pose.orientation.w = 0.0
+
+# rigid.screwdriver_pose2 = Pose()
+# rigid.screwdriver_pose2.position.x = 0.52
+# rigid.screwdriver_pose2.position.y = -0.31
+# rigid.screwdriver_pose2.position.z = -0.32
+# rigid.screwdriver_pose2.orientation.x = 1.0
+# rigid.screwdriver_pose2.orientation.y = 0.0
+# rigid.screwdriver_pose2.orientation.z = 0.0
+# rigid.screwdriver_pose2.orientation.w = 0.0
+
+# rigid.screwdriver_poseTMP = Pose()
+# rigid.screwdriver_poseTMP.position.x = 0.52 - 0.06
+# rigid.screwdriver_poseTMP.position.y = 0.31 
+# rigid.screwdriver_poseTMP.position.z = -0.20 #-0.22
+# rigid.screwdriver_poseTMP.orientation.x = 1.0
+# rigid.screwdriver_poseTMP.orientation.y = 0.0
+# rigid.screwdriver_poseTMP.orientation.z = 0.0
+# rigid.screwdriver_poseTMP.orientation.w = 0.0
+
+# rigid.screwdriver_pose2TMP = Pose()
+# rigid.screwdriver_pose2TMP.position.x = 0.52
+# rigid.screwdriver_pose2TMP.position.y = 0.31
+# rigid.screwdriver_pose2TMP.position.z = -0.32
+# rigid.screwdriver_pose2TMP.orientation.x = 1.0
+# rigid.screwdriver_pose2TMP.orientation.y = 0.0
+# rigid.screwdriver_pose2TMP.orientation.z = 0.0
+# rigid.screwdriver_pose2TMP.orientation.w = 0.0
+
+
 
 
 # rigid.handover_location.position.x = 0.95
@@ -58,32 +172,15 @@ rigid.handover_location.orientation.w = 0.0
 # rigid.handover_location.orientation.z = 0.0
 # rigid.handover_location.orientation.w = 0.7071068
 
-rigid.X = Pose()
-rigid.X.position.x = 0.55
-rigid.X.position.y = -0.77
-rigid.X.position.z = 0.046
-rigid.X.orientation.x = 1.0
-rigid.X.orientation.y = 0.0
-rigid.X.orientation.z = 0.0
-rigid.X.orientation.w = 0.0
 
-rigid.Y = Pose()
-rigid.Y.position.x = 0.55
-rigid.Y.position.y = -0.77
-rigid.Y.position.z = 0.046
-rigid.Y.orientation.x = 1.0
-rigid.Y.orientation.y = 0.0
-rigid.Y.orientation.z = 0.0
-rigid.Y.orientation.w = 0.0
-
-rigid.test = Pose()
-rigid.test.position.x = 0.67
-rigid.test.position.y = -0.61
-rigid.test.position.z = -0.27 #-0.22
-rigid.test.orientation.x = 1.0
-rigid.test.orientation.y = 0.0
-rigid.test.orientation.z = 0.0
-rigid.test.orientation.w = 0.0
+# rigid.test = Pose()
+# rigid.test.position.x = 0.67
+# rigid.test.position.y = -0.61
+# rigid.test.position.z = -0.27 #-0.22
+# rigid.test.orientation.x = 1.0
+# rigid.test.orientation.y = 0.0
+# rigid.test.orientation.z = 0.0
+# rigid.test.orientation.w = 0.0
 
 # rigid.test = Pose()
 # rigid.test.position.x = 0.67
@@ -94,33 +191,27 @@ rigid.test.orientation.w = 0.0
 # rigid.test.orientation.z = 0.0
 # rigid.test.orientation.w = 0.0
 
-rigid.workspace = Pose()
-rigid.workspace.position.x = 0.52+0.10
-rigid.workspace.position.y = -0.31+0.10
-rigid.workspace.position.z = -0.20 #-0.22
-rigid.workspace.orientation.x = 1.0
-rigid.workspace.orientation.y = 0.0
-rigid.workspace.orientation.z = 0.0
-rigid.workspace.orientation.w = 0.0
 
-rigid.workspace2 = Pose()
-rigid.workspace2.position.x = 0.52+0.10
-rigid.workspace2.position.y = -0.31+0.10
-rigid.workspace2.position.z = -0.32
-rigid.workspace2.orientation.x = 1.0
-rigid.workspace2.orientation.y = 0.0
-rigid.workspace2.orientation.z = 0.0
-rigid.workspace2.orientation.w = 0.0
+# rigid.workspace2 = Pose()
+# rigid.workspace2.position.x = 0.52+0.10
+# rigid.workspace2.position.y = -0.31+0.10
+# rigid.workspace2.position.z = -0.32
+# rigid.workspace2.orientation.x = 1.0
+# rigid.workspace2.orientation.y = 0.0
+# rigid.workspace2.orientation.z = 0.0
+# rigid.workspace2.orientation.w = 0.0
 
 
 
 rigid.locations = {'table': [rigid.screwdriver_pose, rigid.screwdriver_pose2], 
-                   'table2': [rigid.screwdriver_poseTMP, rigid.screwdriver_pose2TMP], 
+                #    'table2': [rigid.screwdriver_poseTMP, rigid.screwdriver_pose2TMP], 
                    'exchange point': [rigid.handover_location],
                     'X': [rigid.X],
                     'Y': [rigid.Y],
-                    'test': [rigid.test],
+                    # 'test': [rigid.test],
                     'workspace': [rigid.workspace, rigid.workspace2],
+                    'tuck_positionR': [rigid.tuck_poseR],
+                    'tuck_positionL': [rigid.tuck_poseL],
                     'brick1_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
                     'brick2_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
                     'brick3_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2]} #place in front of the human where he assembles the chair

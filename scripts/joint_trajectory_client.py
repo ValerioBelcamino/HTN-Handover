@@ -73,8 +73,8 @@ class TrajectoryClient():
         print("Action Complete")
 
     def precise_marker_pose_callback(self, msg):
-        rospy.loginfo("precise_marker_pose_callback called")
-        print(msg)
+        # rospy.loginfo("precise_marker_pose_callback called")
+        # print(msg)
         self.precise_m_p = msg
         if not self.stop_sleeping_sig.is_set():
             self.stop_sleeping_sig.set()
@@ -82,12 +82,19 @@ class TrajectoryClient():
     def aruco_callback(self, msg):
         rospy.loginfo("aruco_callback")
         print(msg)
-        
-        self.current_obj = msg.header.frame_id.split('_')
-        for i, mid in enumerate(self.current_obj):
-            self.active_marker_poses[mid] = msg.poses[i]
-        if not self.stop_sleeping_sig.is_set():
-            self.stop_sleeping_sig.set()
+
+        if msg.header.frame_id == '':
+            self.current_obj = ['']
+            self.active_marker_poses = {}
+            if not self.stop_sleeping_sig.is_set():
+                self.stop_sleeping_sig.set()
+
+        else:    
+            self.current_obj = msg.header.frame_id.split('_')
+            for i, mid in enumerate(self.current_obj):
+                self.active_marker_poses[mid] = msg.poses[i]
+            if not self.stop_sleeping_sig.is_set():
+                self.stop_sleeping_sig.set()
 
     def release_callback(self, msg):
         rospy.loginfo("Release callback")

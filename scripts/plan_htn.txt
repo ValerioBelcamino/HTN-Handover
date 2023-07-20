@@ -1,612 +1,432 @@
 This is initial state state 0:
 ------------------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
   - available_objects = []
   - selected_object = None
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'Y', 'left': 'Y', 'right': 'Y', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'Y', 'left': 'Y', 'right': 'Y', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
 FP> find_plan, verbose=3:
     state = state 0_copy_0
-    todo_list = [('deliver_objects', 'robot', "['brick1', 'brick2', 'brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 0 todo_list [('deliver_objects', 'robot', "['brick1', 'brick2', 'brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 0 task ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['deliver_objects']
+    todo_list = [('deliver_objects', 'robot', "['brick1', 'brick2', 'brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 0 todo_list [('deliver_objects', 'robot', "['brick1', 'brick2', 'brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 0 task ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['deliver_objects']
 depth 0 trying deliver_objects: 
 applicable
-depth 0 subtasks: [('check_available_obj', ['brick1', 'brick2', 'brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 1 todo_list [('check_available_obj', "['brick1', 'brick2', 'brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 1 action ('check_available_obj', ['brick1', 'brick2', 'brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 0 subtasks: [('tuck_arms', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('check_available_obj', ['brick1', 'brick2', 'brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>)]
+depth 1 todo_list [('tuck_arms', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('check_available_obj', "['brick1', 'brick2', 'brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 1 action ('tuck_arms', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_1:
 ---------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = []
   - selected_object = None
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'Y', 'left': 'Y', 'right': 'Y', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'tuck_positionR', 'left': 'tuck_positionL', 'right': 'tuck_positionR', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 2 todo_list [('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 2 task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['choose_and_deliver', 'do_nothing']
-depth 2 trying choose_and_deliver: 
-applicable
-depth 2 subtasks: [('choose_obj',), ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 3 todo_list [('choose_obj',), ('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 3 action ('choose_obj',): applied
+depth 2 todo_list [('check_available_obj', "['brick1', 'brick2', 'brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 2 action ('check_available_obj', ['brick1', 'brick2', 'brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_2:
 ---------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = None
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'Y', 'left': 'Y', 'right': 'Y', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'tuck_positionR', 'left': 'tuck_positionL', 'right': 'tuck_positionR', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 4 todo_list [('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 4 task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['pick_and_place']
-depth 4 trying pick_and_place: 
+depth 3 todo_list [('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 3 task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['choose_and_deliver', 'do_nothing']
+depth 3 trying choose_and_deliver: 
 applicable
-depth 4 subtasks: [('pick', 'robot', 'brick1', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('release', 'robot', 'brick1', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('reset_active_arm', 'robot')]
-depth 5 todo_list [('pick', 'robot', 'brick1', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 5 task ('pick', 'robot', 'brick1', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['pick']
-depth 5 trying pick: 
-applicable
-depth 5 subtasks: [('choose_arm', 'brick1', 'robot'), ('transfer', 'robot', 'brick1_pose', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('grasp', 'robot', 'brick1', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 6 todo_list [('choose_arm', 'brick1', 'robot'), ('transfer', 'robot', 'brick1_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('grasp', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 6 action ('choose_arm', 'brick1', 'robot'): applied
+depth 3 subtasks: [('choose_obj',), ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>)]
+depth 4 todo_list [('choose_obj',), ('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 4 action ('choose_obj',): applied
 State state 0_copy_3:
 ---------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
+  - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'Y', 'left': 'Y', 'right': 'Y', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'tuck_positionR', 'left': 'tuck_positionL', 'right': 'tuck_positionR', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 7 todo_list [('transfer', 'robot', 'brick1_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('grasp', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 7 action ('transfer', 'robot', 'brick1_pose', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 5 todo_list [('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 5 task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['pick_and_place']
+depth 5 trying pick_and_place: 
+applicable
+depth 5 subtasks: [('pick', 'robot', 'brick3', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('release', 'robot', 'brick3', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('reset_active_arm', 'robot'), ('reset_selected_object',)]
+depth 6 todo_list [('pick', 'robot', 'brick3', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 6 task ('pick', 'robot', 'brick3', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['pick']
+depth 6 trying pick: 
+applicable
+depth 6 subtasks: [('choose_arm', 'brick3', 'robot'), ('transfer', 'robot', 'brick3_pose', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('grasp', 'robot', 'brick3', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>)]
+depth 7 todo_list [('choose_arm', 'brick3', 'robot'), ('transfer', 'robot', 'brick3_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('grasp', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 7 action ('choose_arm', 'brick3', 'robot'): applied
 State state 0_copy_4:
 ---------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'brick1_pose', 'left': 'Y', 'right': 'brick1_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'tuck_positionR', 'left': 'tuck_positionL', 'right': 'tuck_positionR', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 8 todo_list [('grasp', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 8 action ('grasp', 'robot', 'brick1', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 8 todo_list [('transfer', 'robot', 'brick3_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('grasp', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 8 action ('transfer', 'robot', 'brick3_pose', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_5:
 ---------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': 'brick1'}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'brick1_pose', 'left': 'Y', 'right': 'brick1_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - holding = {'human': None, 'robot': None}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'brick3_pose', 'left': 'tuck_positionL', 'right': 'brick3_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 9 todo_list [('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 9 action ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 9 todo_list [('grasp', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 9 action ('grasp', 'robot', 'brick3', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_6:
 ---------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': 'brick1'}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'workspace', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - holding = {'human': None, 'robot': 'brick3'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'brick3_pose', 'left': 'tuck_positionL', 'right': 'brick3_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 10 todo_list [('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 10 action ('release', 'robot', 'brick1', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 10 todo_list [('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 10 action ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_7:
 ---------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'workspace', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - holding = {'human': None, 'robot': 'brick3'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'workspace', 'left': 'tuck_positionL', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 11 todo_list [('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 11 action ('reset_active_arm', 'robot'): applied
+depth 11 todo_list [('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 11 action ('release', 'robot', 'brick3', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_8:
 ---------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': None}
+  - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'workspace', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'workspace', 'left': 'tuck_positionL', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 12 todo_list [('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 12 task ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['sub_delivery', 'do_nothing']
-depth 12 trying sub_delivery: 
-applicable
-depth 12 subtasks: [('deliver_objects', 'robot', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 13 todo_list [('deliver_objects', 'robot', "['brick1']", '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 13 task ('deliver_objects', 'robot', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['deliver_objects']
-depth 13 trying deliver_objects: 
-applicable
-depth 13 subtasks: [('check_available_obj', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 14 todo_list [('check_available_obj', "['brick1']", '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 14 action ('check_available_obj', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 12 todo_list [('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 12 action ('reset_active_arm', 'robot'): applied
 State state 0_copy_9:
 ---------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'workspace', 'left': 'tuck_positionL', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 15 todo_list [('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 15 task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['choose_and_deliver', 'do_nothing']
-depth 15 trying choose_and_deliver: 
-applicable
-depth 15 subtasks: [('choose_obj',), ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 16 todo_list [('choose_obj',), ('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 16 action ('choose_obj',): applied
+depth 13 todo_list [('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 13 action ('reset_selected_object',): applied
 State state 0_copy_10:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = None
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'workspace', 'left': 'tuck_positionL', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 17 todo_list [('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 17 task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['pick_and_place']
-depth 17 trying pick_and_place: 
+depth 14 todo_list [('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 14 task ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['sub_delivery', 'do_nothing']
+depth 14 trying sub_delivery: 
 applicable
-depth 17 subtasks: [('pick', 'robot', 'brick1', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('release', 'robot', 'brick1', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('reset_active_arm', 'robot')]
-depth 18 todo_list [('pick', 'robot', 'brick1', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 18 task ('pick', 'robot', 'brick1', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['pick']
-depth 18 trying pick: 
+depth 14 subtasks: [('deliver_objects', 'robot', ['brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>)]
+depth 15 todo_list [('deliver_objects', 'robot', "['brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 15 task ('deliver_objects', 'robot', ['brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['deliver_objects']
+depth 15 trying deliver_objects: 
 applicable
-depth 18 subtasks: [('choose_arm', 'brick1', 'robot'), ('transfer', 'robot', 'brick1_pose', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('grasp', 'robot', 'brick1', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 19 todo_list [('choose_arm', 'brick1', 'robot'), ('transfer', 'robot', 'brick1_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('grasp', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 19 action ('choose_arm', 'brick1', 'robot'): applied
+depth 15 subtasks: [('tuck_arms', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('check_available_obj', ['brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>)]
+depth 16 todo_list [('tuck_arms', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('check_available_obj', "['brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 16 action ('tuck_arms', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_11:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
+  - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = None
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'tuck_positionR', 'left': 'tuck_positionL', 'right': 'tuck_positionR', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 20 todo_list [('transfer', 'robot', 'brick1_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('grasp', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 20 action ('transfer', 'robot', 'brick1_pose', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 17 todo_list [('check_available_obj', "['brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 17 action ('check_available_obj', ['brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_12:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
+  - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = None
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'brick1_pose', 'left': 'Y', 'right': 'brick1_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'tuck_positionR', 'left': 'tuck_positionL', 'right': 'tuck_positionR', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 21 todo_list [('grasp', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 21 action ('grasp', 'robot', 'brick1', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 18 todo_list [('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 18 task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['choose_and_deliver', 'do_nothing']
+depth 18 trying choose_and_deliver: 
+applicable
+depth 18 subtasks: [('choose_obj',), ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>)]
+depth 19 todo_list [('choose_obj',), ('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 19 action ('choose_obj',): applied
 State state 0_copy_13:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
+  - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': 'brick1'}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'brick1_pose', 'left': 'Y', 'right': 'brick1_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - holding = {'human': None, 'robot': None}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'tuck_positionR', 'left': 'tuck_positionL', 'right': 'tuck_positionR', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 22 todo_list [('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 22 action ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 20 todo_list [('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 20 task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['pick_and_place']
+depth 20 trying pick_and_place: 
+applicable
+depth 20 subtasks: [('pick', 'robot', 'brick3', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('release', 'robot', 'brick3', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('reset_active_arm', 'robot'), ('reset_selected_object',)]
+depth 21 todo_list [('pick', 'robot', 'brick3', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 21 task ('pick', 'robot', 'brick3', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['pick']
+depth 21 trying pick: 
+applicable
+depth 21 subtasks: [('choose_arm', 'brick3', 'robot'), ('transfer', 'robot', 'brick3_pose', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('grasp', 'robot', 'brick3', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>)]
+depth 22 todo_list [('choose_arm', 'brick3', 'robot'), ('transfer', 'robot', 'brick3_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('grasp', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 22 action ('choose_arm', 'brick3', 'robot'): applied
 State state 0_copy_14:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': 'brick1'}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'workspace', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - holding = {'human': None, 'robot': None}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'tuck_positionR', 'left': 'tuck_positionL', 'right': 'tuck_positionR', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 23 todo_list [('release', 'robot', 'brick1', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 23 action ('release', 'robot', 'brick1', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 23 todo_list [('transfer', 'robot', 'brick3_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('grasp', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 23 action ('transfer', 'robot', 'brick3_pose', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_15:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'workspace', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'brick3_pose', 'left': 'tuck_positionL', 'right': 'brick3_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 24 todo_list [('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 24 action ('reset_active_arm', 'robot'): applied
+depth 24 todo_list [('grasp', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 24 action ('grasp', 'robot', 'brick3', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_16:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': None}
+  - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'workspace', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - holding = {'human': None, 'robot': 'brick3'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'brick3_pose', 'left': 'tuck_positionL', 'right': 'brick3_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 25 todo_list [('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 25 task ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['sub_delivery', 'do_nothing']
-depth 25 trying sub_delivery: 
-applicable
-depth 25 subtasks: [('deliver_objects', 'robot', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 26 todo_list [('deliver_objects', 'robot', "['brick1']", '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 26 task ('deliver_objects', 'robot', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['deliver_objects']
-depth 26 trying deliver_objects: 
-applicable
-depth 26 subtasks: [('check_available_obj', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 27 todo_list [('check_available_obj', "['brick1']", '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 27 action ('check_available_obj', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 25 todo_list [('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 25 action ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_17:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': None}
+  - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick1
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - holding = {'human': None, 'robot': 'brick3'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'workspace', 'left': 'tuck_positionL', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 28 todo_list [('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 28 task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['choose_and_deliver', 'do_nothing']
-depth 28 trying choose_and_deliver: 
-applicable
-depth 28 subtasks: [('choose_obj',), ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 29 todo_list [('choose_obj',), ('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 29 action ('choose_obj',): applied
+depth 26 todo_list [('release', 'robot', 'brick3', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 26 action ('release', 'robot', 'brick3', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_18:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': None}
+  - active_arm = {'human': None, 'robot': 'right'}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'workspace', 'left': 'tuck_positionL', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 30 todo_list [('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 30 task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['pick_and_place']
-depth 30 trying pick_and_place: 
-applicable
-depth 30 subtasks: [('pick', 'robot', 'brick2', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('release', 'robot', 'brick2', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('reset_active_arm', 'robot')]
-depth 31 todo_list [('pick', 'robot', 'brick2', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 31 task ('pick', 'robot', 'brick2', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['pick']
-depth 31 trying pick: 
-applicable
-depth 31 subtasks: [('choose_arm', 'brick2', 'robot'), ('transfer', 'robot', 'brick2_pose', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('grasp', 'robot', 'brick2', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 32 todo_list [('choose_arm', 'brick2', 'robot'), ('transfer', 'robot', 'brick2_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('grasp', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 32 action ('choose_arm', 'brick2', 'robot'): applied
+depth 27 todo_list [('reset_active_arm', 'robot'), ('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 27 action ('reset_active_arm', 'robot'): applied
 State state 0_copy_19:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
+  - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = brick3
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'workspace', 'left': 'tuck_positionL', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 33 todo_list [('transfer', 'robot', 'brick2_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('grasp', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 33 action ('transfer', 'robot', 'brick2_pose', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 28 todo_list [('reset_selected_object',), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 28 action ('reset_selected_object',): applied
 State state 0_copy_20:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
+  - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = None
+  - locations = {'tuck_positionL', 'table2', 'workspace', 'exchange point', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'Y', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'brick2_pose', 'left': 'Y', 'right': 'brick2_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'workspace', 'left': 'tuck_positionL', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 34 todo_list [('grasp', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 34 action ('grasp', 'robot', 'brick2', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
+depth 29 todo_list [('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 29 task ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['sub_delivery', 'do_nothing']
+depth 29 trying sub_delivery: 
+applicable
+depth 29 subtasks: [('deliver_objects', 'robot', ['brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>)]
+depth 30 todo_list [('deliver_objects', 'robot', "['brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 30 task ('deliver_objects', 'robot', ['brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>) methods ['deliver_objects']
+depth 30 trying deliver_objects: 
+applicable
+depth 30 subtasks: [('tuck_arms', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('check_available_obj', ['brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>), ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>)]
+depth 31 todo_list [('tuck_arms', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('check_available_obj', "['brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 31 action ('tuck_arms', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): applied
 State state 0_copy_21:
 ----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
-  - box_empty = False
-  - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
-  - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
-  - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': 'brick2'}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'brick2_pose', 'left': 'Y', 'right': 'brick2_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
-
-depth 35 todo_list [('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 35 action ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
-State state 0_copy_22:
-----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
-  - box_empty = False
-  - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
-  - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
-  - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': 'brick2'}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'workspace', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
-
-depth 36 todo_list [('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 36 action ('release', 'robot', 'brick2', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
-State state 0_copy_23:
-----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
-  - box_empty = False
-  - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
-  - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
-  - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'workspace', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
-
-depth 37 todo_list [('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 37 action ('reset_active_arm', 'robot'): applied
-State state 0_copy_24:
-----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
+  - objects = {'dummy_tuck_objL', 'brick6', 'brick2', 'brick4', 'screwdriver', 'brick3', 'brick1', 'screws', 'box', 'brick5', 'dummy_tuck_objR', 'screwdriver2'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': None}
   - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
+  - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
+  - available_objects = ['brick3']
+  - selected_object = None
+  - locations = {'tuck_positionL', 'workspace', 'exchange point', 'Y', 'X', 'brick1_pose', 'table', 'tuck_positionR', 'table2', 'brick3_pose', 'brick2_pose'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'workspace', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
+  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'tuck_positionR', 'left': 'tuck_positionL', 'right': 'tuck_positionR', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'workspace', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
 
-depth 38 todo_list [('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 38 task ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['sub_delivery', 'do_nothing']
-depth 38 trying sub_delivery: 
-applicable
-depth 38 subtasks: [('deliver_objects', 'robot', ['brick1', 'brick2'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 39 todo_list [('deliver_objects', 'robot', "['brick1', 'brick2']", '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 39 task ('deliver_objects', 'robot', ['brick1', 'brick2'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['deliver_objects']
-depth 39 trying deliver_objects: 
-applicable
-depth 39 subtasks: [('check_available_obj', ['brick1', 'brick2'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 40 todo_list [('check_available_obj', "['brick1', 'brick2']", '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 40 action ('check_available_obj', ['brick1', 'brick2'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
-State state 0_copy_25:
-----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
-  - box_empty = False
-  - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': None}
-  - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
-  - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
-
-depth 41 todo_list [('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 41 task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['choose_and_deliver', 'do_nothing']
-depth 41 trying choose_and_deliver: 
-applicable
-depth 41 subtasks: [('choose_obj',), ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 42 todo_list [('choose_obj',), ('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 42 action ('choose_obj',): applied
-State state 0_copy_26:
-----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
-  - box_empty = False
-  - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': None}
-  - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
-  - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
-
-depth 43 todo_list [('pick_and_place', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 43 task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['pick_and_place']
-depth 43 trying pick_and_place: 
-applicable
-depth 43 subtasks: [('pick', 'robot', 'brick2', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('release', 'robot', 'brick2', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('reset_active_arm', 'robot')]
-depth 44 todo_list [('pick', 'robot', 'brick2', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 44 task ('pick', 'robot', 'brick2', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>) methods ['pick']
-depth 44 trying pick: 
-applicable
-depth 44 subtasks: [('choose_arm', 'brick2', 'robot'), ('transfer', 'robot', 'brick2_pose', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('grasp', 'robot', 'brick2', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>), ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)]
-depth 45 todo_list [('choose_arm', 'brick2', 'robot'), ('transfer', 'robot', 'brick2_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('grasp', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 45 action ('choose_arm', 'brick2', 'robot'): applied
-State state 0_copy_27:
-----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
-  - box_empty = False
-  - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
-  - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
-  - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'workspace', 'left': 'Y', 'right': 'workspace', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
-
-depth 46 todo_list [('transfer', 'robot', 'brick2_pose', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('grasp', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 46 action ('transfer', 'robot', 'brick2_pose', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
-State state 0_copy_28:
-----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
-  - box_empty = False
-  - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
-  - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
-  - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': None}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'brick2_pose', 'left': 'Y', 'right': 'brick2_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
-
-depth 47 todo_list [('grasp', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 47 action ('grasp', 'robot', 'brick2', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): applied
-State state 0_copy_29:
-----------------------
-  - objects = {'brick4', 'box', 'brick2', 'brick5', 'brick6', 'brick1', 'screwdriver2', 'screwdriver', 'brick3', 'screws'}
-  - box_empty = False
-  - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
-  - active_arm = {'human': None, 'robot': 'right'}
-  - markerID2obj = {'0': 'brick1', '10': 'brick2', '100': 'brick3'}
-  - available_objects = ['brick1', 'brick2']
-  - selected_object = brick2
-  - locations = {'X', 'exchange point', 'brick3_pose', 'brick2_pose', 'workspace', 'table2', 'Y', 'brick1_pose', 'table'}
-  - agents = {'robot', 'human'}
-  - holding = {'human': None, 'robot': 'brick2'}
-  - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'human': 'X', 'robot': 'brick2_pose', 'left': 'Y', 'right': 'brick2_pose', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}
-
-depth 48 todo_list [('transfer', 'robot', 'workspace', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('release', 'robot', 'brick2', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>'), ('reset_active_arm', 'robot'), ('continue_delivery', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>')]
-depth 48 action ('transfer', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>): not applicable
-depth 44 could not accomplish task ('pick', 'robot', 'brick2', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 43 could not accomplish task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 41 trying do_nothing: 
-not applicable
-depth 41 could not accomplish task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 39 could not accomplish task ('deliver_objects', 'robot', ['brick1', 'brick2'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 38 trying do_nothing: 
-not applicable
-depth 38 could not accomplish task ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 31 could not accomplish task ('pick', 'robot', 'brick2', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 30 could not accomplish task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 28 trying do_nothing: 
-not applicable
-depth 28 could not accomplish task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 26 could not accomplish task ('deliver_objects', 'robot', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 25 trying do_nothing: 
-not applicable
-depth 25 could not accomplish task ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 18 could not accomplish task ('pick', 'robot', 'brick1', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 17 could not accomplish task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 15 trying do_nothing: 
-not applicable
-depth 15 could not accomplish task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 13 could not accomplish task ('deliver_objects', 'robot', ['brick1'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 12 trying do_nothing: 
-not applicable
-depth 12 could not accomplish task ('continue_delivery', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 5 could not accomplish task ('pick', 'robot', 'brick1', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 4 could not accomplish task ('pick_and_place', 'robot', 'workspace', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 2 trying do_nothing: 
-not applicable
-depth 2 could not accomplish task ('process_available_objects', 'robot', <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-depth 0 could not accomplish task ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7f7ddc130dc0>)
-FP> result =False
+depth 32 todo_list [('check_available_obj', "['brick3']", '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>'), ('process_available_objects', 'robot', '<joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>')]
+depth 32 action ('check_available_obj', ['brick3'], <joint_trajectory_client.TrajectoryClient object at 0x7fd0a73928e0>): 

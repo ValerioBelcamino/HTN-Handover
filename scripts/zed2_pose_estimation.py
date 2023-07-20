@@ -200,6 +200,8 @@ class ArucoDetection():
         real_ids = []
         iterations = 0
 
+        tries = 0
+
         while iterations<30:
             # ret, image_ocv = cap.read()
             image_ocv, depth_map = self.grab_zed_frame(self.zed, self.image_size, self.depth_zed, self.image_zed)
@@ -255,26 +257,38 @@ class ArucoDetection():
                             p = Pose()
                             p.position.x = trasl[0]
                             p.position.y = trasl[1]
-                            p.position.z = trasl[2] + 0.08
+                            p.position.z = trasl[2] + 0.1
                             p.orientation.x = 1.0#r.ndarray[1]
                             p.orientation.y = 0.0#r.ndarray[2]
                             p.orientation.z = 0.0#r.ndarray[3]
                             p.orientation.w = 0.0#r.ndarray[0]
                             pose_dict[id[0]] = p#[trasl, r.normalized]
                         # print('-----------------')
-                iterations += 1
-                if iterations == 30-1:
-                    if pose_dict:
-                        pose_array_msg = PoseArray()
-                        pose_array_msg.header.frame_id = '_'.join([str(id) for id in pose_dict.keys()]) #0_10_100 [pose1, pose2, pose3]
-                        pose_array_msg.header.stamp = rospy.Time.now()
-                        for key in pose_dict.keys():
-                            pose_array_msg.poses.append(pose_dict[key])
-                        self.obj_pub.publish(pose_array_msg)
-                        rospy.loginfo(pose_array_msg)
-                        return pose_dict #[]
-                    else:
-                        iterations = 0
+            iterations += 1
+            
+            
+            if iterations == 30-1:
+                if pose_dict:
+                    pose_array_msg = PoseArray()
+                    pose_array_msg.header.frame_id = '_'.join([str(id) for id in pose_dict.keys()]) #0_10_100 [pose1, pose2, pose3]
+                    pose_array_msg.header.stamp = rospy.Time.now()
+                    for key in pose_dict.keys():
+                        pose_array_msg.poses.append(pose_dict[key])
+                    self.obj_pub.publish(pose_array_msg)
+                    # rospy.loginfo(pose_array_msg)
+                    return pose_dict #[]
+                else:
+                    tries += 1
+                    iterations = 0
+
+            if tries >=3:
+                    pose_array_msg = PoseArray()
+                    pose_array_msg.header.frame_id = '' 
+                    pose_array_msg.header.stamp = rospy.Time.now()
+                    pose_array_msg.poses = []
+                    # rospy.loginfo(pose_array_msg)
+                    self.obj_pub.publish(pose_array_msg)
+                    return pose_dict
 
             image_resize = cv2.resize(image_ocv, (1280, 720))
             cv2.imshow("Image", image_resize)

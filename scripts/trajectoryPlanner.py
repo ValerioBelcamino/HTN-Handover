@@ -100,13 +100,13 @@ class TrajectoryPlanner():
 
 
     def plan_cartesian_trajectory(self, destination_pose, side):#, start_joint_angles):
-        mg = None
+        move_group = None
         if side == 'right':
-            mg = self.move_group_right
+            move_group = self.move_group_right
         elif side == 'left':
-            mg = self.move_group_left
+            move_group = self.move_group_left
         
-        (plan, fraction) = mg.compute_cartesian_path([destination_pose], 0.01, 0.0) #TODO MAX STEP
+        (plan, fraction) = move_group.compute_cartesian_path([destination_pose], 0.01, 0.0) #TODO MAX STEP
         # mg.set_pose_target(destination_pose)
         # plan = self.move_group.plan()
 

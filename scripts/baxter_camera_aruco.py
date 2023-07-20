@@ -21,8 +21,11 @@ class CameraListener():
         # self.calibration_matrix = np.load(self.calibration_matrix_path)    
         # self.distortion_path = "/home/index1/index_ws/src/Baxter_Camera_Listener/scripts/zed2_distortion.npy"
         # self.distortion = np.load(self.distortion_path)
-        self.calibration_matrix = np.array([[359.64857211, 0.000e+00, 305.77728251],
-                                            [0.000e+00, 363.0997639, 205.89834584],
+        # self.calibration_matrix = np.array([[359.64857211, 0.000e+00, 305.77728251],
+        #                                     [0.000e+00, 363.0997639, 205.89834584],
+        #                                     [0.000e+00, 0.000e+00, 1.000e+00]])
+        self.calibration_matrix = np.array([[405.64857211, 0.000e+00, 324.77728251],
+                                            [0.000e+00, 405.0997639, 201.89834584],
                                             [0.000e+00, 0.000e+00, 1.000e+00]])
         self.distortion = np.array([0.11498325, -0.49102047, -0.00257414, -0.00573257,  0.52045801])
         self.saving_path = "./images/"
@@ -31,6 +34,12 @@ class CameraListener():
         self.tf_w2cam = np.eye(4)
         self.current_marker = None
         self.enable_camera = False
+        self.static_offset_tf = np.asarray([
+                                            [1.0, 0.0, 0.0, 0.08],
+                                            [0.0, 1.0, 0.0, 0.0],
+                                            [0.0, 0.0, 1.0, 0.04],
+                                            [0.0, 0.0, 0.0, 1.0]
+                                        ])
 
     def get_transform_matrix(self, r_mat, t_vec):
         tf_mat = np.concatenate((r_mat, t_vec.reshape(3,1)), axis=1)
@@ -115,8 +124,8 @@ class CameraListener():
         except CvBridgeError as e:
             print(e)
         # cv_image = cv_image[0:380, 180:580]
-        # cv_image = cv_image[0:360, :]
-        # cv2.imshow("Image window",   cv_image)
+        cv_image = cv_image[0:360, :]
+        
         self.process(cv_image)
 
         # if self.image_id %20 == 0:
@@ -163,16 +172,10 @@ class CameraListener():
         rod = [cv2.Rodrigues(r)[0] for r in rvec]
         ref_row = np.where(ids == self.current_marker)
 
-        
-        static_rot = np.asarray([
-            [0.0, 1.0, 0.0],
-            [1.0, 0.0, 0.0],
-            [0.0, 0.0, -1.0]
-        ])
-
         if len(ref_row[0]) != 0:
             ref_row = ref_row[0][0]
             ref_rot = rod[ref_row]
+
             ref_rot = np.dot(ref_rot, static_rot)
             rvec[ref_row] = cv2.Rodrigues(ref_rot)[0]
             ref_trasl = tvec[ref_row]
@@ -183,32 +186,61 @@ class CameraListener():
                 (trans,rot) = self.tf_listener.lookupTransform('/world', '/right_hand_camera', rospy.Time(0))
                 q_rot = quaternionic.array([ rot[3], rot[0], rot[1], rot[2]])
                 tf_w2cam = self.get_transform_matrix(q_rot.to_rotation_matrix, np.asarray(trans))
+                tf_w2ref = np.dot(tf_w2cam,ref_tf)
+ 
+                tf_w2ref = np.dot(tf_w2ref, self.static_offset_tf)
+                # print(tf_w2ref)
+                # print(tf_w2ref2)
                 # print(ref_tf)
                 # print(tf_w2cam)
                 # # print(np.dot(ref_tf,tf_w2cam))
                 # print(self.tf2quat_tr(np.dot(tf_w2cam,ref_tf)))
-                rt, rr = self.tf2quat_tr(np.dot(tf_w2cam,ref_tf))
+                rt, rr = self.tf2quat_tr(tf_w2ref)
+                # rt2, rr2 = self.tf2quat_tr(tf_w2ref2)
+                rr_arr = rr.ndarray
+                rr_arr = np.roll(rr_arr, -1)
+                # rr_arr2 = rr2.ndarray
+                # rr_arr2 = np.roll(rr_arr2, -1)
+
                 pose_msg = Pose()
                 pose_msg.position.x = rt[0]
                 pose_msg.position.y = rt[1]
                 pose_msg.position.z = rt[2]
-                pose_msg.orientation.x = rr.ndarray[0]
-                pose_msg.orientation.y = rr.ndarray[1]
-                pose_msg.orientation.z = rr.ndarray[2]
-                pose_msg.orientation.w = rr.ndarray[3]
+
+                # # add small offset to Z
+                # pose_msg.position.z -= 0.06
+                # if pose_msg.position.z < -0.32:
+                #     pose_msg.position.z = -0.32
+
+                pose_msg.orientation.x = rr_arr[0] #1.0 #rr.ndarray[0]
+                pose_msg.orientation.y = rr_arr[1] #0.0 #rr.ndarray[1]
+                pose_msg.orientation.z = rr_arr[2] #0.0 #rr.ndarray[2]
+                pose_msg.orientation.w = rr_arr[3] #0.0 #rr.ndarray[3]
 
                 br = tf.TransformBroadcaster()
                 br.sendTransform(rt,
-                          rr.ndarray,
+                          rr_arr,
                           rospy.Time.now(),
                           'marker' + str(self.current_marker),
                             'world')
+                cv2.drawFrameAxes(image_ocv, self.calibration_matrix, self.distortion, rvec[ref_row], tvec[ref_row], 0.05)
+                cv2.imshow("Image window",   image_ocv)
+                # br.sendTransform(rt2,
+                #           rr_arr2,
+                #           rospy.Time.now(),
+                #           'marker2' + str(self.current_marker),
+                #             'world')
+                # br.sendTransform(rt,
+                #           rr3.ndarray,
+                #           rospy.Time.now(),
+                #           'marker21' + str(self.current_marker),
+                #             'world')
                 
                 self.marker_pose_pub.publish(pose_msg)
                 # rospy.logwarn(f'Published msg: {pose_msg}')
-                self.enable_camera = False
-                cv2.destroyAllWindows()
-                return
+                # self.enable_camera = False
+                # cv2.destroyAllWindows()
+                # return
             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
                     print('')
         
@@ -246,5 +278,5 @@ if __name__ == '__main__':
     camera_listener = CameraListener()
     image_sub = rospy.Subscriber("/baxter_camera_listener_activation", Int32, camera_listener.listener)
     rospy.Subscriber("/cameras/right_hand_camera/image", Image, camera_listener.camera_callback)
-    # camera_listener.listener()
+    # camera_listener.listener(Int32(100))
     rospy.spin()
