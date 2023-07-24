@@ -6,7 +6,8 @@ import quaternionic
 import rospy
 from std_msgs.msg import  Bool
 from geometry_msgs.msg import Pose, PoseArray
-
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
 
 
 class ArucoDetection():
@@ -14,16 +15,22 @@ class ArucoDetection():
         rospy.init_node('zed2_pose_estimation', anonymous=True)
         
         self.obj_pub = rospy.Publisher("/aruco_detection", PoseArray, queue_size=10)
+
+        self.zed_enable_sub = rospy.Subscriber("/aruco_detection_activation", Bool, self.zed_enabler)
+        self.image_sub = rospy.Subscriber("/zed2_driver", Image, self.loop)
+
         self.trasl_list = []
         self.scene_markers = [100, 10, 0]
         self.smoothing_dict = {}
         self.smoothing_window = 50
+        self.enable_camera = False
         self.static_rot = np.asarray([
             [0.0, 1.0, 0.0],
             [1.0, 0.0, 0.0],
             [0.0, 0.0, -1.0]
         ])
 
+        self.bridge = CvBridge()
         
         self.baxter2ref = np.asarray([[0.999, 0.008, 0.033, 0.658],
                                 [0.012, -0.994, -0.113, -0.000],
@@ -45,12 +52,8 @@ class ArucoDetection():
         self.arucoParams = cv2.aruco.DetectorParameters()
         self.arucoDetector = cv2.aruco.ArucoDetector(self.arucoDict, self.arucoParams)
 
-        self.zed, self.image_size, self.image_zed, self.depth_zed = self.init_zed(sl.RESOLUTION.HD2K)
+        # self.zed, self.image_size, self.image_zed, self.depth_zed = self.init_zed(sl.RESOLUTION.HD2K)
 
-    def listener(self):
-        self.image_sub = rospy.Subscriber("/aruco_detection_activation", Bool, self.loop)
-        # self.loop()
-        rospy.spin()
 
     def tf2quat_tr(self, tf):
         quat = quaternionic.array.from_rotation_matrix(tf[:3, :3])
@@ -193,8 +196,15 @@ class ArucoDetection():
         return image
 
 
+    def zed_enabler(self, msg):
+        self.enable_camera = True
+        rospy.loginfo(f'Enabling ZED2 camera: {self.enable_camera}')
+
+
 
     def loop(self, msg):
+        if not self.enable_camera:
+            return
         rospy.loginfo("I am listening to the camera")
         # print(zed.get_camera_information())
         real_ids = []
@@ -204,9 +214,10 @@ class ArucoDetection():
 
         while iterations<30:
             # ret, image_ocv = cap.read()
-            image_ocv, depth_map = self.grab_zed_frame(self.zed, self.image_size, self.depth_zed, self.image_zed)
-            depth_map_resize = cv2.resize(depth_map, (1280, 720))
-            cv2.imshow("depth_map", depth_map_resize)
+            # image_ocv, depth_map = self.grab_zed_frame(self.zed, self.image_size, self.depth_zed, self.image_zed)
+            image_ocv = self.bridge.imgmsg_to_cv2(msg, desired_encoding="passthrough")
+            # depth_map_resize = cv2.resize(depth_map, (1280, 720))
+            # cv2.imshow("depth_map", depth_map_resize)
             # Display the left image from the numpy array
             image_ocv_grey = cv2.cvtColor(image_ocv, cv2.COLOR_BGR2GRAY)
             corners, ids, rejected = self.arucoDetector.detectMarkers(image_ocv_grey)
@@ -222,7 +233,7 @@ class ArucoDetection():
             #             real_ids.append(id)
     
             # rvec, tvec, _ = self.estimatePoseSingleMarkers(corners, 0.25, calibration_matrix, distortion)
-            rvec, tvec, _ = self.estimatePoseSingleMarkers(refined_corners, 0.056, self.calibration_matrix, self.distortion, depth_map)
+            rvec, tvec, _ = self.estimatePoseSingleMarkers(refined_corners, 0.056, self.calibration_matrix, self.distortion, None)
             
             # self.trasl_list.append(tvec)
             # tvec = self.moving_average_filter(tvec, self.trasl_list, 10)
@@ -275,6 +286,7 @@ class ArucoDetection():
                     for key in pose_dict.keys():
                         pose_array_msg.poses.append(pose_dict[key])
                     self.obj_pub.publish(pose_array_msg)
+                    self.enable_camera = False
                     # rospy.loginfo(pose_array_msg)
                     return pose_dict #[]
                 else:
@@ -288,21 +300,26 @@ class ArucoDetection():
                     pose_array_msg.poses = []
                     # rospy.loginfo(pose_array_msg)
                     self.obj_pub.publish(pose_array_msg)
+                    self.enable_camera = False
                     return pose_dict
 
             image_resize = cv2.resize(image_ocv, (1280, 720))
             cv2.imshow("Image", image_resize)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-        self.obj_pub.publish('_'.join([str(id) for id in real_ids]))
+        # self.obj_pub.publish('_'.join([str(id) for id in real_ids]))
         cv2.destroyAllWindows()
 
-    # def listener(self):
-    #     rospy.loginfo("I am listening to the camera")
-    #     # spin() simply keeps python from exiting until this node is stopped
-    #     rospy.spin()
+    def listener(self):
+        rospy.loginfo("I am listening for zed enable message")
+        # spin() simply keeps python from exiting until this node is stopped
+        rospy.spin()
+
+
 
 if __name__ == '__main__':
     HD = ArucoDetection()
     HD.listener()
-    # HD.loop()
+    # HD.image_sub = rospy.Subscriber("/aruco_detection_activation", Bool, HD.loop)
+    # HD.image_sub = rospy.Subscriber("/aruco_detection_activation", Bool, HD.loop)
+    # HD.loop(12)

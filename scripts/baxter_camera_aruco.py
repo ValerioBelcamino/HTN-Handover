@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from std_msgs.msg import Int32
+from std_msgs.msg import String
 from geometry_msgs.msg import Pose
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
@@ -16,24 +16,25 @@ class CameraListener():
         self.cv_b = CvBridge()
         
         self.marker_pose_pub = rospy.Publisher("/precise_marker_pose", Pose, queue_size=10)
-        # self.handover_detector = HandoverDetector()
-        # self.calibration_matrix_path = "/home/index1/index_ws/src/Baxter_Camera_Listener/scripts/zed2_calibration_matrix.npy"
-        # self.calibration_matrix = np.load(self.calibration_matrix_path)    
-        # self.distortion_path = "/home/index1/index_ws/src/Baxter_Camera_Listener/scripts/zed2_distortion.npy"
-        # self.distortion = np.load(self.distortion_path)
+        self.camera_listener_sub = None
+        # WHAT I OBTAINED FROM THE CALIBRATION
         # self.calibration_matrix = np.array([[359.64857211, 0.000e+00, 305.77728251],
         #                                     [0.000e+00, 363.0997639, 205.89834584],
         #                                     [0.000e+00, 0.000e+00, 1.000e+00]])
+        self.distortion = np.array([0.11498325, -0.49102047, -0.00257414, -0.00573257,  0.52045801])
+
+        #WHAT THE ROBOT SENDS THROUGH THE CAMERA INFO TOPIC
         self.calibration_matrix = np.array([[405.64857211, 0.000e+00, 324.77728251],
                                             [0.000e+00, 405.0997639, 201.89834584],
                                             [0.000e+00, 0.000e+00, 1.000e+00]])
-        self.distortion = np.array([0.11498325, -0.49102047, -0.00257414, -0.00573257,  0.52045801])
         self.saving_path = "./images/"
         self.image_id = 0
         self.tf_listener = tf.TransformListener()
         self.tf_w2cam = np.eye(4)
         self.current_marker = None
         self.enable_camera = False
+
+        # THIS IS TO GRASP SOMETHING WHICH IS NOT RIGHT ON THE ARUCO CENTER --> MOVE SLIGHTLY DOWN AND FORWARD (X AXIS)
         self.static_offset_tf = np.asarray([
                                             [1.0, 0.0, 0.0, 0.08],
                                             [0.0, 1.0, 0.0, 0.0],
@@ -64,8 +65,6 @@ class CameraListener():
         RETURN list of rvecs, tvecs, and trash (so that it corresponds to the old estimatePoseSingleMarkers())
         '''
 
-        
-
         marker_points = np.array([[-marker_size / 2, marker_size / 2, 0],
                                 [marker_size / 2, marker_size / 2, 0],
                                 [marker_size / 2, -marker_size / 2, 0],
@@ -80,6 +79,8 @@ class CameraListener():
             tvecs.append(t)
             trash.append(nada)
         return np.asarray(rvecs), np.asarray(tvecs), trash
+
+
 
     def aruco_display(self, corners, ids, rejected, image):
         if len(corners) > 0:
@@ -118,31 +119,31 @@ class CameraListener():
         if not self.enable_camera:
             cv2.destroyAllWindows()
             return
-        # rospy.loginfo(rospy.get_caller_id() + "I heard a message")
         try:
             cv_image = self.cv_b.imgmsg_to_cv2(data, desired_encoding="bgr8")
         except CvBridgeError as e:
             print(e)
-        # cv_image = cv_image[0:380, 180:580]
-        cv_image = cv_image[0:360, :]
-        
+
         self.process(cv_image)
-
-        # if self.image_id %20 == 0:
-
-        #     print(self.saving_path + f'image_{self.image_id}.jpg')
-
-        #     # cv2.imwrite(self.saving_path + f'image_{self.image_id}.jpg', cv_image)
-
         self.image_id += 1
-        # self.handover_detector.find_orange_shape_and_compute_optical_flow(cv_image, height=cv_image.shape[0], width=cv_image.shape[1])
         cv2.waitKey(3)
+
+
 
     def listener(self, msg):
         self.enable_camera = True
+
+        # TODO UNCOMMENT AND DEBUG THIS
+        markerID, side, *discard = msg.data.split('_')
+        rospy.loginfo(f'Looking for this marker: {markerID} on side {side}')
+        if self.camera_listener_sub: 
+            self.camera_listener_sub.unregister()
+        self.camera_listener_sub = rospy.Subscriber(f"/cameras/{side}_hand_camera/image", Image, self.camera_callback)
+
         rospy.loginfo(f'Looking for this marker: {msg.data}')
         rospy.loginfo(f'Enabling camera: {self.enable_camera}')
-        self.current_marker = msg.data
+        # self.current_marker = msg.data
+        self.current_marker = int(markerID)
         # rospy.Subscriber("/cameras/right_hand_camera/image", Image, self.camera_callback)
         # rospy.loginfo("I am listening to the camera")
 
@@ -276,7 +277,9 @@ class CameraListener():
 
 if __name__ == '__main__':
     camera_listener = CameraListener()
-    image_sub = rospy.Subscriber("/baxter_camera_listener_activation", Int32, camera_listener.listener)
-    rospy.Subscriber("/cameras/right_hand_camera/image", Image, camera_listener.camera_callback)
+    #TODO CHANGE THE MESSAGE TO CONTAIN BOTH THE MARKER ID TO FIND AND WHICH ARM TO USE (EX. '100_left)
+    image_sub = rospy.Subscriber("/baxter_camera_listener_activation", String, camera_listener.listener)
+    #TODO PUT THIS LISTENER IN THE camera_listener.listener() FUNCTION and change the topic name to f'/cameras/{side}_hand_camera/image'
+    # rospy.Subscriber("/cameras/right_hand_camera/image", Image, camera_listener.camera_callback)
     # camera_listener.listener(Int32(100))
     rospy.spin()

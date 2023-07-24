@@ -16,12 +16,18 @@
   <!--<node name="hand_obstacle" pkg="baxter_moveit" type="obstacle_handler.py" output="screen" />-->
   <include file="$(find baxter_moveit)/launch/moveit_config.launch" />    
   
+   <!-- Recording Tactile Sensor-->
+	<node pkg="melexis"  type="melexis_driver.py"  name="melexis_driver1" output="screen" respawn="false"    launch-prefix=""  required="true">
+		<param name="port"                value="$(arg port1)"/>  
+	</node>
+	
 
   <!-- Camera Listener -->
   <node name="baxter_camera_listener" pkg="baxter_camera_listener" type="handoverDetector.py" output="screen" />  
     <!-- Camera Listener -->
   <node name="baxter_camera_aruco" pkg="baxter_moveit" type="baxter_camera_aruco.py" output="screen" /> 
   <!-- ARUCO Listener -->
+  <node name="zed2_driver" pkg="baxter_moveit" type="zed2_driver.py" output="screen" />  
   <node name="zed2_pose_estimation" pkg="baxter_moveit" type="zed2_pose_estimation.py" output="screen" />  
   
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find baxter_moveit)/config/rviz_planning_scene.rviz" required="true" />

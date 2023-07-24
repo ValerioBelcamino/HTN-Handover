@@ -15,7 +15,7 @@ from control_msgs.msg import (
     FollowJointTrajectoryGoal,
     GripperCommandActionGoal
 )
-from std_msgs.msg import Bool, Int32
+from std_msgs.msg import Bool, String
 from trajectory_msgs.msg import (
     JointTrajectoryPoint,
 )
@@ -36,11 +36,11 @@ class TrajectoryClient():
         self.precision_marker_pose = rospy.Subscriber("/precise_marker_pose", Pose, self.precise_marker_pose_callback)
 
         self.melexis_activation_pub = rospy.Publisher("/melexis_activation", Bool, queue_size=10)
-        self.camera_activation_pub = rospy.Publisher("/camera_listener_activation", Bool, queue_size=10)
-        self.baxter_camera_activation_pub = rospy.Publisher("/baxter_camera_listener_activation", Int32, queue_size=10)
+        self.camera_activation_pub = rospy.Publisher("/camera_listener_activation", String, queue_size=10)
+        self.baxter_camera_activation_pub = rospy.Publisher("/baxter_camera_listener_activation", String, queue_size=10)
         self.aruco_activation_pub = rospy.Publisher("/aruco_detection_activation", Bool, queue_size=10)
 
-        self.trajTime = 6.0 # Time to complete each trajectory 
+        self.trajTime = 5.0 # Time to complete each trajectory 
         self.traj_p = TrajectoryPlanner()
         self.stop_sleeping_sig = Event()
 

@@ -29,7 +29,7 @@ def transfer(state, agent, loc_to, traj_client):
                 if 'brick' in state.selected_object and loc_to != 'workspace':
                     print('selected_object: ', state.selected_object)
                     selected_marker_id = int(state.obj2markerID[state.selected_object])
-                    precise_pose = precision_marker_detection(state, traj_client, selected_marker_id)
+                    precise_pose = precision_marker_detection(state, traj_client, selected_marker_id, state.active_arm[agent])
                     print(precise_pose)
                     rigid.locations[state.selected_object + '_pose'].append(precise_pose)
                     print('new location for ', state.selected_object, ' is: ', rigid.locations[state.selected_object + '_pose'])
@@ -59,7 +59,6 @@ def tuck_arms(state, agent, traj_client):
 
 def grasp(state, agent, obj, traj_client):
     if agent in state.agents and obj in state.objects and state.at[agent] == state.at[obj]: #and not state.holding[agent]:
-        # TO TEST
         if agent == 'robot':
             if not state.holding[agent]:
                 traj_client.traj_p.close_gripper(state.active_arm[agent])
@@ -73,16 +72,19 @@ def grasp(state, agent, obj, traj_client):
 
 def wait_empty_box(state, traj_client):
     if state.box_empty == False:
-        traj_client.camera_activation_pub.publish(True)
+        # TODO UNCOMMENT AND TEST
+        traj_client.camera_activation_pub.publish(state.active_arm['robot'])
+        # traj_client.camera_activation_pub.publish(True)
         if traj_client.stop_sleeping_sig.is_set():
             traj_client.stop_sleeping_sig.clear()
         traj_client.stop_sleeping_sig.wait()
         state.box_empty = True
         return state
     
-def precision_marker_detection(state, traj_client, id):
+def precision_marker_detection(state, traj_client, id, side):
     print('precision_marker_detection')
-    traj_client.baxter_camera_activation_pub.publish(id)
+    traj_client.baxter_camera_activation_pub.publish(f'{id}_{side}')
+    # traj_client.baxter_camera_activation_pub.publish(id)
     print('activating baxter camera with id: ', id)
     if traj_client.stop_sleeping_sig.is_set():
         traj_client.stop_sleeping_sig.clear()
