@@ -34,11 +34,13 @@ class TrajectoryClient():
         self.release_sub = rospy.Subscriber("/melexis_release", Bool, self.release_callback)
         self.aruco_objects = rospy.Subscriber("/aruco_detection", PoseArray, self.aruco_callback)
         self.precision_marker_pose = rospy.Subscriber("/precise_marker_pose", Pose, self.precise_marker_pose_callback)
+        self.precision_marker_pose = rospy.Subscriber("/IMU_HAR_idle", Pose, self.IMU_HAR_idle_callback)
 
         self.melexis_activation_pub = rospy.Publisher("/melexis_activation", Bool, queue_size=10)
         self.camera_activation_pub = rospy.Publisher("/camera_listener_activation", String, queue_size=10)
         self.baxter_camera_activation_pub = rospy.Publisher("/baxter_camera_listener_activation", String, queue_size=10)
         self.aruco_activation_pub = rospy.Publisher("/aruco_detection_activation", Bool, queue_size=10)
+        self.aruco_activation_pub = rospy.Publisher("/IMU_HAR_activation", Bool, queue_size=10)
 
         self.trajTime = 5.0 # Time to complete each trajectory 
         self.traj_p = TrajectoryPlanner()
@@ -49,7 +51,6 @@ class TrajectoryClient():
         self.precise_m_p = None
 
     def callback(self, msg):
-
         trajectory = msg.trajectory
         n = len(trajectory)
 
@@ -72,8 +73,15 @@ class TrajectoryClient():
         self.ex_complete_pub.publish(True)
         print("Action Complete")
 
+    def IMU_HAR_idle_callback(self, msg):
+        rospy.loginfo("IMU_HAR_idle_callback called")
+        print(msg)
+        if not self.stop_sleeping_sig.is_set():
+            self.stop_sleeping_sig.set()
+
+
     def precise_marker_pose_callback(self, msg):
-        # rospy.loginfo("precise_marker_pose_callback called")
+        rospy.loginfo("precise_marker_pose_callback called")
         # print(msg)
         self.precise_m_p = msg
         if not self.stop_sleeping_sig.is_set():

@@ -2,24 +2,29 @@
 <launch>     
 
   <arg name="port1"           	     default="/dev/ttyACM0" />
+  <arg name="save"           	     	     default="True" />
+  <arg name="experiment_ID"          	     default="0" />
+  
+    
 
   <node name="gripper_action_server" pkg="baxter_interface" type="gripper_action_server.py" output="log" />
   <node name="joint_action_server_right" pkg="baxter_interface" type="joint_trajectory_action_server.py" args="--limb right --mode velocity" required="true" output="log"/>
-    <node name="joint_action_server_left" pkg="baxter_interface" type="joint_trajectory_action_server.py" args="--limb left --mode velocity" required="true" output="log"/>
-  
-  <!-- Run the Joint Trajectory Action -->
-
-  
-   <node name="planner_htn" pkg="baxter_moveit" type="planner.py" args="--limb right" output="screen" />
-  <node name="joint_states_service" pkg="baxter_moveit" type="joint_states_service.py" output="screen" />
+  <node name="joint_action_server_left" pkg="baxter_interface" type="joint_trajectory_action_server.py" args="--limb left --mode velocity" required="true" output="log"/>
   
   <!--<node name="hand_obstacle" pkg="baxter_moveit" type="obstacle_handler.py" output="screen" />-->
-  <include file="$(find baxter_moveit)/launch/moveit_config.launch" />    
+  <include file="$(find baxter_moveit)/launch/moveit_config.launch" />  
+
   
+  <!-- Run the Joint Trajectory Action -->
+  <node name="planner_htn" pkg="baxter_moveit" type="planner.py" args="--limb right" output="screen" />
+  <node name="joint_states_service" pkg="baxter_moveit" type="joint_states_service.py" output="screen" />
+  
+  
+<group ns="experiment">
    <!-- Recording Tactile Sensor-->
-	<node pkg="melexis"  type="melexis_driver.py"  name="melexis_driver1" output="screen" respawn="false"    launch-prefix=""  required="true">
+   <node pkg="melexis"  type="melexis_driver.py"  name="melexis_driver1" output="screen" respawn="false"    launch-prefix=""  required="true">
 		<param name="port"                value="$(arg port1)"/>  
-	</node>
+   </node>
 	
 
   <!-- Camera Listener -->
@@ -28,8 +33,12 @@
   <node name="baxter_camera_aruco" pkg="baxter_moveit" type="baxter_camera_aruco.py" output="screen" /> 
   <!-- ARUCO Listener -->
   <node name="zed2_driver" pkg="baxter_moveit" type="zed2_driver.py" output="screen" />  
+  <node name="zed2_save_images" pkg="baxter_moveit" type="zed2_save_images.py" output="screen" required="true">
+  	<param name="save"                	     value="$(arg save)"/>
+  	<param name="experiment_ID"                value="$(arg experiment_ID)"/>
+  </node>  
   <node name="zed2_pose_estimation" pkg="baxter_moveit" type="zed2_pose_estimation.py" output="screen" />  
   
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find baxter_moveit)/config/rviz_planning_scene.rviz" required="true" />
-
+</group>
 </launch>

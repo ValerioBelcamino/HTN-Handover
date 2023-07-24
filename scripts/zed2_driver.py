@@ -4,7 +4,7 @@ import cv2
 import rospy
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
-
+import os
 
 class Zed2Driver():
     def __init__(self, isSaving = False, saving_path = '/home/index1/index_ws/src/baxter_moveit/data'):
@@ -75,7 +75,7 @@ class Zed2Driver():
             self.image_pub.publish(image_message)
 
             if self.isSaving:
-                cv2.imwrite(self.saving_path + '/zed2_image_' + str(iterations) + '.png', image_ocv)
+                cv2.imwrite(os.path.join(self.saving_path, str(rospy.Time.now()) + '.png'), image_ocv)
                 iterations += 1
 
             # image_ocv = bridge.imgmsg_to_cv2(image_message, desired_encoding="passthrough")
@@ -84,7 +84,15 @@ class Zed2Driver():
             cv2.imshow("Image", image_resize)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+
+            rospy.on_shutdown(self.on_shutdown_hook)
+
         cv2.destroyAllWindows()
+
+    def on_shutdown_hook(self):
+        self.zed.close()
+        cv2.destroyAllWindows()
+        exit(0)
 
 if __name__ == '__main__':
     HD = Zed2Driver(isSaving=False, saving_path='/home/index1/index_ws/src/baxter_moveit/data')

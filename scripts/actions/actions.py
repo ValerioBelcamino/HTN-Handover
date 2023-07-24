@@ -69,6 +69,16 @@ def grasp(state, agent, obj, traj_client):
             else:      
                 state.holding[agent] = obj
         return state
+    
+def precision_marker_detection(state, traj_client, id, side):
+    print('precision_marker_detection')
+    traj_client.baxter_camera_activation_pub.publish(f'{id}_{side}')
+    # traj_client.baxter_camera_activation_pub.publish(id)
+    print('activating baxter camera with id: ', id)
+    if traj_client.stop_sleeping_sig.is_set():
+        traj_client.stop_sleeping_sig.clear()
+    traj_client.stop_sleeping_sig.wait()
+    return traj_client.precise_m_p
 
 def wait_empty_box(state, traj_client):
     if state.box_empty == False:
@@ -80,16 +90,6 @@ def wait_empty_box(state, traj_client):
         traj_client.stop_sleeping_sig.wait()
         state.box_empty = True
         return state
-    
-def precision_marker_detection(state, traj_client, id, side):
-    print('precision_marker_detection')
-    traj_client.baxter_camera_activation_pub.publish(f'{id}_{side}')
-    # traj_client.baxter_camera_activation_pub.publish(id)
-    print('activating baxter camera with id: ', id)
-    if traj_client.stop_sleeping_sig.is_set():
-        traj_client.stop_sleeping_sig.clear()
-    traj_client.stop_sleeping_sig.wait()
-    return traj_client.precise_m_p
     
 def wait_tool_pulling(state, agent, traj_client):
     if agent in state.agents:
@@ -103,6 +103,12 @@ def wait_tool_pulling(state, agent, traj_client):
             elif state.active_arm[agent] == 'left':
                 traj_client.traj_p.open_gripper('left')
     return state
+
+def wait_idle(state, agent, traj_client):
+    traj_client.melexis_activation_pub.publish(True)
+    if traj_client.stop_sleeping_sig.is_set():
+        traj_client.stop_sleeping_sig.clear()
+    traj_client.stop_sleeping_sig.wait()
 
 def release(state, agent, obj, traj_client):
     if agent in state.agents and obj in state.objects and state.holding[agent] == obj:
