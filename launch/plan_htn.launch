@@ -2,8 +2,9 @@
 <launch>     
 
   <arg name="port1"           	     default="/dev/ttyACM0" />
-  <arg name="save"           	     	     default="True" />
+  <arg name="save"           	     	     default="False" />
   <arg name="experiment_ID"          	     default="0" />
+  <arg name="base_saving_path"              default="/home/index1/Desktop/htn_experiment"/>
   
     
 
@@ -29,16 +30,19 @@
 
   <!-- Camera Listener -->
   <node name="baxter_camera_listener" pkg="baxter_camera_listener" type="handoverDetector.py" output="screen" />  
-    <!-- Camera Listener -->
+  <!-- Camera Listener -->
   <node name="baxter_camera_aruco" pkg="baxter_moveit" type="baxter_camera_aruco.py" output="screen" /> 
   <!-- ARUCO Listener -->
   <node name="zed2_driver" pkg="baxter_moveit" type="zed2_driver.py" output="screen" />  
   <node name="zed2_save_images" pkg="baxter_moveit" type="zed2_save_images.py" output="screen" required="true">
   	<param name="save"                	     value="$(arg save)"/>
   	<param name="experiment_ID"                value="$(arg experiment_ID)"/>
+  	<param name="base_saving_path"                value="$(arg base_saving_path)"/>
   </node>  
   <node name="zed2_pose_estimation" pkg="baxter_moveit" type="zed2_pose_estimation.py" output="screen" />  
   
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find baxter_moveit)/config/rviz_planning_scene.rviz" required="true" />
 </group>
+
+
 </launch>

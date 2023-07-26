@@ -104,11 +104,13 @@ def wait_tool_pulling(state, agent, traj_client):
                 traj_client.traj_p.open_gripper('left')
     return state
 
-def wait_idle(state, agent, traj_client):
-    traj_client.melexis_activation_pub.publish(True)
+def wait_idle(state, traj_client):
+    traj_client.idle_classification_pub.publish(True)
     if traj_client.stop_sleeping_sig.is_set():
         traj_client.stop_sleeping_sig.clear()
     traj_client.stop_sleeping_sig.wait()
+    print('not idle anymore')
+    return state
 
 def release(state, agent, obj, traj_client):
     if agent in state.agents and obj in state.objects and state.holding[agent] == obj:
@@ -211,7 +213,8 @@ gtpyhop.declare_actions(transfer,
                         grasp, 
                         release, 
                         wait_tool_pulling, 
-                        wait_empty_box, 
+                        wait_empty_box,
+                        wait_idle, 
                         check_available_obj,
                         choose_obj, 
                         choose_arm, 

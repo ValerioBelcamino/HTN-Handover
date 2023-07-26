@@ -277,9 +277,5 @@ class CameraListener():
 
 if __name__ == '__main__':
     camera_listener = CameraListener()
-    #TODO CHANGE THE MESSAGE TO CONTAIN BOTH THE MARKER ID TO FIND AND WHICH ARM TO USE (EX. '100_left)
     image_sub = rospy.Subscriber("/baxter_camera_listener_activation", String, camera_listener.listener)
-    #TODO PUT THIS LISTENER IN THE camera_listener.listener() FUNCTION and change the topic name to f'/cameras/{side}_hand_camera/image'
-    # rospy.Subscriber("/cameras/right_hand_camera/image", Image, camera_listener.camera_callback)
-    # camera_listener.listener(Int32(100))
     rospy.spin()

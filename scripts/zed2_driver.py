@@ -14,6 +14,7 @@ class Zed2Driver():
         self.saving_path = saving_path
         self.zed, self.image_size, self.image_zed, self.depth_zed = self.init_zed(sl.RESOLUTION.HD2K)
         self.bridge = CvBridge()
+        self.stop_looping = False
 
 
     def init_zed(self, resolution):
@@ -65,7 +66,7 @@ class Zed2Driver():
 
         tries = 0
 
-        while True:
+        while not self.stop_looping or not rospy.is_shutdown():
             image_ocv, depth_map = self.grab_zed_frame(self.zed, self.image_size, self.depth_zed, self.image_zed)
             # print(image_ocv.shape)
             
@@ -87,12 +88,11 @@ class Zed2Driver():
 
             rospy.on_shutdown(self.on_shutdown_hook)
 
-        cv2.destroyAllWindows()
 
     def on_shutdown_hook(self):
+        self.stop_looping = True
         self.zed.close()
         cv2.destroyAllWindows()
-        exit(0)
 
 if __name__ == '__main__':
     HD = Zed2Driver(isSaving=False, saving_path='/home/index1/index_ws/src/baxter_moveit/data')

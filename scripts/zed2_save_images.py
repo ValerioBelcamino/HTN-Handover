@@ -7,20 +7,25 @@ from sensor_msgs.msg import Image
 import os
 
 class Zed2Saver():
-    def __init__(self, saving_path = '/home/index1/index_ws/src/baxter_moveit/data'):
+    def __init__(self):
         rospy.init_node('zed2_saver', anonymous=True)
         self.experimentID = rospy.get_param('~experiment_ID', 'default')
         rospy.logerr("Experiment ID: " + str(self.experimentID))
         self.isSaving = rospy.get_param('~save', 'default')
         rospy.logerr("isSaving: " + str(self.isSaving))
+        self.base_saving_path = rospy.get_param('~base_saving_path', 'default')
+        rospy.logerr("base_saving_path: " + str(self.base_saving_path))
+        self.saving_path = os.path.join(self.base_saving_path, str(self.experimentID))
     
         self.image_sub = rospy.Subscriber("/zed2_driver", Image, self.save_img_callback)
-        self.saving_path = saving_path
+
         self.bridge = CvBridge()
 
     def Start(self):
         if self.isSaving:
-            self.saving_path = os.path.join(self.saving_path, str(self.experimentID))
+            if not os.path.exists(self.base_saving_path):
+                os.makedirs(self.base_saving_path)
+            self.saving_path = os.path.join(self.saving_path, 'Zed')
             if not os.path.exists(self.saving_path):
                 os.makedirs(self.saving_path)
                 rospy.logerr("Saving path: " + self.saving_path + " created")
@@ -41,5 +46,5 @@ class Zed2Saver():
         
 
 if __name__ == '__main__':
-    ZS = Zed2Saver(saving_path='/home/index1/index_ws/src/baxter_moveit/data')
+    ZS = Zed2Saver()
     ZS.Start()

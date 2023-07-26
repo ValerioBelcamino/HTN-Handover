@@ -1,6 +1,6 @@
 This is initial state state 0:
 ------------------------------
-  - objects = {'box', 'brick3', 'screwdriver2', 'brick5', 'dummy_tuck_objR', 'brick1', 'dummy_tuck_objL', 'screws', 'screwdriver', 'brick4', 'brick6', 'brick2'}
+  - objects = {'brick5', 'dummy_tuck_objR', 'dummy_tuck_objL', 'brick6', 'brick1', 'screws', 'screwdriver', 'brick3', 'screwdriver2', 'box', 'brick2', 'brick4'}
   - box_empty = False
   - obj_properties = {'screwdriver': None, 'screwdriver2': None, 'box': False}
   - active_arm = {'human': None, 'robot': None}
@@ -8,7 +8,7 @@ This is initial state state 0:
   - obj2markerID = {'brick1': '0', 'brick2': '10', 'brick3': '100'}
   - available_objects = []
   - selected_object = None
-  - locations = {'workspace', 'tuck_positionL', 'table', 'brick3_pose', 'table2', 'brick2_pose', 'tuck_positionR', 'exchange point', 'brick1_pose', 'Y', 'X'}
+  - locations = {'Y', 'tuck_positionL', 'brick2_pose', 'table2', 'X', 'brick3_pose', 'workspace', 'brick1_pose', 'tuck_positionR', 'table', 'exchange point'}
   - agents = {'robot', 'human'}
   - holding = {'human': None, 'robot': None}
   - at = {'box': 'table', 'screwdriver': 'table', 'screwdriver2': 'table2', 'dummy_tuck_objL': 'tuck_positionL', 'dummy_tuck_objR': 'tuck_positionR', 'human': 'X', 'robot': 'Y', 'left': 'Y', 'right': 'Y', 'brick1': 'brick1_pose', 'brick2': 'brick2_pose', 'brick3': 'brick3_pose', 'brick6': 'brick2', 'brick4': 'table', 'brick5': 'table'}

@@ -281,7 +281,7 @@ class ArucoDetection():
             if iterations == 30-1:
                 if pose_dict:
                     pose_array_msg = PoseArray()
-                    pose_array_msg.header.frame_id = '_'.join([str(id) for id in pose_dict.keys()]) #0_10_100 [pose1, pose2, pose3]
+                    pose_array_msg.header.frame_id = '_'.join([str(id) for id in pose_dict.keys()]) #header: '0_10_100', poses: [pose1, pose2, pose3]
                     pose_array_msg.header.stamp = rospy.Time.now()
                     for key in pose_dict.keys():
                         pose_array_msg.poses.append(pose_dict[key])
@@ -320,6 +320,3 @@ class ArucoDetection():
 if __name__ == '__main__':
     HD = ArucoDetection()
     HD.listener()
-    # HD.image_sub = rospy.Subscriber("/aruco_detection_activation", Bool, HD.loop)
-    # HD.image_sub = rospy.Subscriber("/aruco_detection_activation", Bool, HD.loop)
-    # HD.loop(12)
