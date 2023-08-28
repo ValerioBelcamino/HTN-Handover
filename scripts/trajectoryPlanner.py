@@ -232,10 +232,11 @@ class TrajectoryPlanner():
     def close_gripper(self, side):
         sleep(1)
         gripperCommandMsg = GripperCommandActionGoal()
-        gripperCommandMsg.goal.command.position = 15
+        gripperCommandMsg.goal.command.position = 10
         if side == 'right': 
             self.gripper_publisher_right.publish(gripperCommandMsg)
         elif side == 'left':
+            # gripperCommandMsg.goal.command.position = 0
             self.gripper_publisher_left.publish(gripperCommandMsg)
 
         

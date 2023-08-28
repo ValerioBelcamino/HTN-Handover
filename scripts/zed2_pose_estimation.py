@@ -20,9 +20,9 @@ class ArucoDetection():
         self.image_sub = rospy.Subscriber("/zed2_driver", Image, self.loop)
 
         self.trasl_list = []
-        self.scene_markers = [100, 10, 0]
+        self.scene_markers = [100, 10, 1, 0, 20, 200, 2, 4, 40]
         self.smoothing_dict = {}
-        self.smoothing_window = 50
+        self.smoothing_window = 20
         self.enable_camera = False
         self.static_rot = np.asarray([
             [0.0, 1.0, 0.0],
@@ -36,7 +36,10 @@ class ArucoDetection():
                                 [0.012, -0.994, -0.113, -0.000],
                                 [0.032, 0.113, -0.993, -0.280],
                                 [0.000, 0.000, 0.000, 1.000]])
-
+        self.baxter2ref = np.asarray([[1.0, 0.0, 0.0, 0.658],
+                                [0.0, -1.0, -0.0, -0.000],
+                                [0.0, 0.0, -1.0, -0.280],
+                                [0.000, 0.000, 0.000, 1.000]])
 
         self.logi2ref = np.load("/home/index1/index_ws/src/zed_cv2/cam2ref.npy")
         np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
@@ -46,7 +49,12 @@ class ArucoDetection():
         self.distortion_path = "/home/index1/index_ws/src/zed_cv2/zed2_distortion.npy"
         self.distortion = np.load(self.distortion_path)
 
+        self.logi2ref = np.asarray([[-0.0, 1.0, -0.0, 0.068],
+                        [-1.000, -0.0, -0.0, -0.041],
+                        [-0.0, 0.0, 1.0, 2.583],
+                        [0.000, 0.000, 0.000, 1.000]])
         print('\n',self.distortion)
+        print('\n',self.logi2ref)
 
         self.arucoDict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250) #cv2.aruco.DICT_ARUCO_ORIGINAL
         self.arucoParams = cv2.aruco.DetectorParameters()
@@ -233,7 +241,7 @@ class ArucoDetection():
             #             real_ids.append(id)
     
             # rvec, tvec, _ = self.estimatePoseSingleMarkers(corners, 0.25, calibration_matrix, distortion)
-            rvec, tvec, _ = self.estimatePoseSingleMarkers(refined_corners, 0.056, self.calibration_matrix, self.distortion, None)
+            rvec, tvec, _ = self.estimatePoseSingleMarkers(refined_corners, 0.057, self.calibration_matrix, self.distortion, None) #0.56
             
             # self.trasl_list.append(tvec)
             # tvec = self.moving_average_filter(tvec, self.trasl_list, 10)
@@ -266,9 +274,12 @@ class ArucoDetection():
                             # print(f'ID: {id}, trasl: {trasl}, rot: {r.normalized}')
                             r = r.normalized
                             p = Pose()
+                            trasl[0] = float(format(trasl[0], '.3f'))
+                            trasl[1] = float(format(trasl[1], '.3f'))
+                            trasl[2] = float(format(trasl[2], '.3f'))
                             p.position.x = trasl[0]
                             p.position.y = trasl[1]
-                            p.position.z = trasl[2] + 0.1
+                            p.position.z = 0.#trasl[2] + 0.1
                             p.orientation.x = 1.0#r.ndarray[1]
                             p.orientation.y = 0.0#r.ndarray[2]
                             p.orientation.z = 0.0#r.ndarray[3]
@@ -293,12 +304,12 @@ class ArucoDetection():
                     tries += 1
                     iterations = 0
 
-            if tries >=3:
+            if tries >=5:
                     pose_array_msg = PoseArray()
                     pose_array_msg.header.frame_id = '' 
                     pose_array_msg.header.stamp = rospy.Time.now()
                     pose_array_msg.poses = []
-                    # rospy.loginfo(pose_array_msg)
+                    rospy.loginfo(pose_array_msg)
                     self.obj_pub.publish(pose_array_msg)
                     self.enable_camera = False
                     return pose_dict

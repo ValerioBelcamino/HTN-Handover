@@ -20,12 +20,12 @@ def exchange(state, agent1, agent2, obj, traj_client):
                 ('wait_tool_pulling', agent1, traj_client),
                 ('release', agent1, obj, traj_client),
                 ('reset_active_arm', agent1)]
-        elif obj == 'box':
+        elif 'box' in obj:
             return[('grasp', agent2, obj, traj_client), 
-                   ('wait_empty_box', traj_client), 
-                ('transfer', agent1, 'table', traj_client),
+                   ('wait_empty_box', obj, traj_client), 
+                ('transfer', agent1, state.boxes_home_pose[obj], traj_client),
                 ('release', agent1, obj, traj_client),
-                ('transfer', agent1, 'X', traj_client),
+                # ('transfer', agent1, 'X', traj_client),
                 ('reset_active_arm', agent1)]
 
 def receive(state, agent, obj, traj_client):
@@ -51,24 +51,37 @@ def deliver_objects(state, agent, obj_list, traj_client):
         return [
                 # ('tuck_arm', agent, 'dummy_tuck_objL', 'tuck_positionL', traj_client),
                 # ('tuck_arm', agent, 'dummy_tuck_objR', 'tuck_positionR', traj_client),
-                ('tuck_arms', agent, traj_client),
+                # ('tuck_arms', agent, traj_client),
                 ('check_available_obj', obj_list, traj_client), 
-                ('process_available_objects', agent, traj_client)]
+                ('process_available_objects', obj_list, agent, traj_client)]
 
-def do_nothing(state, agent, traj_client):
+def do_nothing(state, obj_list, agent, traj_client):
     if state.available_objects == []:
         return []
 
-def sub_delivery(state, agent, traj_client):
+def sub_delivery(state, obj_list, agent, traj_client):
     if state.available_objects != []:
-        return [('deliver_objects', agent, state.available_objects, traj_client)]
+        return [('deliver_objects', agent, obj_list, traj_client)]
 
 
-def choose_and_deliver(state, agent, traj_client):
+def choose_and_deliver(state, obj_list, agent, traj_client):
     if state.available_objects != []:
         return [('choose_obj',), 
                 ('pick_and_place', agent, 'workspace', traj_client), 
-                ('continue_delivery', agent, traj_client)]
+                ('continue_delivery', obj_list, agent, traj_client)]
+    
+def assembly_chair(state, client):
+    if True:
+        return  [
+                # ('wait_idle', client),
+                # ('tuck_arms', 'robot', client),
+                ('handover', 'robot', 'human', 'box', client),
+                ('handover', 'robot', 'human', 'box2', client),
+                ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3', 'brick4'], client),
+                ('deliver_objects', 'robot', ['brick5', 'brick6'], client),
+                ('handover', 'robot', 'human', 'screwdriver', client),
+                ('handover', 'robot', 'human', 'box3', client),
+                ]
 
 gtpyhop.declare_task_methods('pick', pick)
 gtpyhop.declare_task_methods('receive', receive)
@@ -81,3 +94,4 @@ gtpyhop.declare_task_methods('process_available_objects', choose_and_deliver, do
 gtpyhop.declare_task_methods('continue_delivery', sub_delivery, do_nothing)
 gtpyhop.declare_task_methods('pick_and_place', pick_and_place)
 gtpyhop.declare_task_methods('deliver_objects', deliver_objects)
+gtpyhop.declare_task_methods('assembly_chair', assembly_chair)

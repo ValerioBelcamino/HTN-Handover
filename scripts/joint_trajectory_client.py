@@ -157,6 +157,29 @@ class TrajectoryClient():
         # if fract > 0.99:
         #     self.execute_trajectory(simple_traj)        
 
+    def tuck(self):
+        # current_joint_state = JointState()
+        for limb in ['left', 'right']:
+            if limb == 'left':
+                m_group = self.traj_p.move_group_left
+                joint_values = [-0.10392719837923678, 2.1563934925699204, 1.495247772991307, -0.6715000898968398, -0.7923010769428162, -0.07746602978821339, 3.051087787104088]
+            else:
+                m_group = self.traj_p.move_group_right
+                joint_values = [-0.10316020798529407, 2.223505152039907, -1.4891118498397653, -0.6550097964270717, -2.2422964166915036, -0.11083011192472114, 3.017340209770609]
+            joint_names = [limb + '_' + joint for joint in ['e0', 'e1', 's0', 's1', 'w0', 'w1', 'w2']]
+            # current_joint_state.name = joint_names
+            # current_joint_state.position = start_joint_config
+            # moveit_robot_state = RobotState()
+            # moveit_robot_state.joint_state = current_joint_state
+            # self.move_group.set_start_state(moveit_robot_state)
+            dict = {}
+            for name, value in zip(joint_names, joint_values):
+                dict[name] = value
+            m_group.set_joint_value_target(dict)
+            m_group.set_goal_tolerance(10e-3)
+            
+            plan = m_group.plan()
+            self.execute_trajectory(plan[1], limb)
 
 
     def reach_handover_location(self):

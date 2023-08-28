@@ -3,13 +3,22 @@ import time
 import random
 import rospy
 from state.rigid import rigid
+import copy
 
 def transfer(state, agent, loc_to, traj_client):
     if agent in state.agents and loc_to in state.locations:
-        loc_from = state.at[agent] 
-        loc_to_pose = rigid.locations[loc_to]
+        loc_from = state.at[agent]
+
+        if 'workspace' == loc_from and state.active_arm[agent] == 'left':
+            loc_from += 'L'
+        if 'workspace' == loc_to and state.active_arm[agent] == 'left':
+            loc_to += 'L'
+        loc_to_pose = copy.deepcopy(rigid.locations[loc_to])
 
         if agent == 'robot':
+            # if loc_to == 'workspace' and state.active_arm[agent] == 'left':
+            #     for i in range(len(loc_to_pose)):
+            #         loc_to_pose[i].position.y = 0.13
             if loc_to == 'exchange point' and state.active_arm[agent] == 'left':
                 for i in range(len(loc_to_pose)):
                     loc_to_pose[i].position.y *= -1.0
@@ -26,7 +35,7 @@ def transfer(state, agent, loc_to, traj_client):
             # so we have to add the precise pose in the second position of the list
             # brick1_pose': [pose1, precise],
             if state.selected_object:
-                if 'brick' in state.selected_object and loc_to != 'workspace':
+                if 'brick' in state.selected_object and 'workspace' not in loc_to: #loc_to != 'workspace':
                     print('selected_object: ', state.selected_object)
                     selected_marker_id = int(state.obj2markerID[state.selected_object])
                     precise_pose = precision_marker_detection(state, traj_client, selected_marker_id, state.active_arm[agent])
@@ -46,14 +55,18 @@ def transfer(state, agent, loc_to, traj_client):
 
 def tuck_arms(state, agent, traj_client):
     if agent in state.agents and not state.holding[agent]:
-        state.at[agent] = 'tuck_positionR'
-        state.at['left'] = 'tuck_positionL'
-        state.at['right'] = 'tuck_positionR'
+        state.at[agent] = 'workspace' #'tuck_positionR'
+        state.at['left'] = 'workspaceL' #'tuck_positionL'
+        state.at['right'] = 'workspace' #'tuck_positionR'
 
-        if not traj_client.transfer([rigid.locations['tuck_positionR'][0]], 'right'):
+        # if not traj_client.transfer([rigid.locations['tuck_positionR'][0]], 'right'):
+        if not traj_client.transfer([rigid.locations['workspace'][0]], 'right'):
             return None 
-        if not traj_client.transfer([rigid.locations['tuck_positionL'][0]], 'left'):
+        # if not traj_client.transfer([rigid.locations['tuck_positionL'][0]], 'left'):
+        if not traj_client.transfer([rigid.locations['workspaceL'][0]], 'left'):
             return None
+        
+        # traj_client.tuck()
     return state
 
 
@@ -80,15 +93,15 @@ def precision_marker_detection(state, traj_client, id, side):
     traj_client.stop_sleeping_sig.wait()
     return traj_client.precise_m_p
 
-def wait_empty_box(state, traj_client):
-    if state.box_empty == False:
+def wait_empty_box(state, obj, traj_client):
+    if state.box_empty[obj] == False:
         # TODO UNCOMMENT AND TEST
         traj_client.camera_activation_pub.publish(state.active_arm['robot'])
         # traj_client.camera_activation_pub.publish(True)
         if traj_client.stop_sleeping_sig.is_set():
             traj_client.stop_sleeping_sig.clear()
         traj_client.stop_sleeping_sig.wait()
-        state.box_empty = True
+        state.box_empty[obj] = True
         return state
     
 def wait_tool_pulling(state, agent, traj_client):
@@ -151,7 +164,7 @@ def check_available_obj(state, obj_list, traj_client):
         print('active_marker_poses: ', traj_client.active_marker_poses)
         print('state.available_objects: ', state.available_objects)
         for obj_marker_id in traj_client.current_obj:
-            if state.markerID2obj[obj_marker_id] not in state.available_objects:
+            if state.markerID2obj[obj_marker_id] not in state.available_objects and state.markerID2obj[obj_marker_id] in obj_list:
                 state.available_objects.append(state.markerID2obj[obj_marker_id])
             rigid.locations[state.markerID2obj[obj_marker_id] + '_pose'] = [traj_client.active_marker_poses[obj_marker_id]]
             state.at[state.markerID2obj[obj_marker_id]] = state.markerID2obj[obj_marker_id] + '_pose'

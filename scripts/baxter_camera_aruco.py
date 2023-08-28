@@ -33,12 +33,13 @@ class CameraListener():
         self.tf_w2cam = np.eye(4)
         self.current_marker = None
         self.enable_camera = False
+        self.current_arm = None
 
         # THIS IS TO GRASP SOMETHING WHICH IS NOT RIGHT ON THE ARUCO CENTER --> MOVE SLIGHTLY DOWN AND FORWARD (X AXIS)
         self.static_offset_tf = np.asarray([
-                                            [1.0, 0.0, 0.0, 0.08],
+                                            [1.0, 0.0, 0.0, 0.06],
                                             [0.0, 1.0, 0.0, 0.0],
-                                            [0.0, 0.0, 1.0, 0.04],
+                                            [0.0, 0.0, 1.0, 0.08],
                                             [0.0, 0.0, 0.0, 1.0]
                                         ])
 
@@ -121,6 +122,7 @@ class CameraListener():
             return
         try:
             cv_image = self.cv_b.imgmsg_to_cv2(data, desired_encoding="bgr8")
+            # cv2.imshow("Image window", cv_image)
         except CvBridgeError as e:
             print(e)
 
@@ -139,9 +141,10 @@ class CameraListener():
         if self.camera_listener_sub: 
             self.camera_listener_sub.unregister()
         self.camera_listener_sub = rospy.Subscriber(f"/cameras/{side}_hand_camera/image", Image, self.camera_callback)
+        self.current_arm = side
 
         rospy.loginfo(f'Looking for this marker: {msg.data}')
-        rospy.loginfo(f'Enabling camera: {self.enable_camera}')
+        rospy.loginfo(f'Enabling camera: {self.enable_camera}, current arm: {self.current_arm}')
         # self.current_marker = msg.data
         self.current_marker = int(markerID)
         # rospy.Subscriber("/cameras/right_hand_camera/image", Image, self.camera_callback)
@@ -151,7 +154,7 @@ class CameraListener():
         # rospy.spin()
 
     def process(self, image_ocv):
-
+        # print("Processing image")
         static_rot = np.asarray([
             [0.0, 1.0, 0.0],
             [1.0, 0.0, 0.0],
@@ -167,7 +170,7 @@ class CameraListener():
         corners, ids, rejected = arucoDetector.detectMarkers(image_ocv_grey)
 
 
-        rvec, tvec, _ = self.estimatePoseSingleMarkers(corners, 0.057, self.calibration_matrix, self.distortion)
+        rvec, tvec, _ = self.estimatePoseSingleMarkers(corners, 0.057, self.calibration_matrix, self.distortion) #0.057,
         # rvec, tvec, _ = self.estimatePoseSingleMarkers(corners, 0.038, self.calibration_matrix, self.distortion)
 
         rod = [cv2.Rodrigues(r)[0] for r in rvec]
@@ -182,14 +185,15 @@ class CameraListener():
             ref_trasl = tvec[ref_row]
 
             ref_tf = self.get_transform_matrix(ref_rot, ref_trasl)
-
+            # cv2.imshow("Image window",   image_ocv_grey)
             try:
-                (trans,rot) = self.tf_listener.lookupTransform('/world', '/right_hand_camera', rospy.Time(0))
+                (trans,rot) = self.tf_listener.lookupTransform('/world', f'/{self.current_arm}_hand_camera', rospy.Time(0))
                 q_rot = quaternionic.array([ rot[3], rot[0], rot[1], rot[2]])
                 tf_w2cam = self.get_transform_matrix(q_rot.to_rotation_matrix, np.asarray(trans))
                 tf_w2ref = np.dot(tf_w2cam,ref_tf)
  
                 tf_w2ref = np.dot(tf_w2ref, self.static_offset_tf)
+
                 # print(tf_w2ref)
                 # print(tf_w2ref2)
                 # print(ref_tf)
@@ -202,7 +206,6 @@ class CameraListener():
                 rr_arr = np.roll(rr_arr, -1)
                 # rr_arr2 = rr2.ndarray
                 # rr_arr2 = np.roll(rr_arr2, -1)
-
                 pose_msg = Pose()
                 pose_msg.position.x = rt[0]
                 pose_msg.position.y = rt[1]
@@ -218,14 +221,15 @@ class CameraListener():
                 pose_msg.orientation.z = rr_arr[2] #0.0 #rr.ndarray[2]
                 pose_msg.orientation.w = rr_arr[3] #0.0 #rr.ndarray[3]
 
-                br = tf.TransformBroadcaster()
-                br.sendTransform(rt,
-                          rr_arr,
-                          rospy.Time.now(),
-                          'marker' + str(self.current_marker),
-                            'world')
-                cv2.drawFrameAxes(image_ocv, self.calibration_matrix, self.distortion, rvec[ref_row], tvec[ref_row], 0.05)
-                cv2.imshow("Image window",   image_ocv)
+                # br = tf.TransformBroadcaster()
+                # br.sendTransform(rt,
+                #           rr_arr,
+                #           rospy.Time.now(),
+                #           'marker' + str(self.current_marker),
+                #             'world')
+                # cv2.drawFrameAxes(image_ocv, self.calibration_matrix, self.distortion, rvec[ref_row], tvec[ref_row], 0.05)
+
+                
                 # br.sendTransform(rt2,
                 #           rr_arr2,
                 #           rospy.Time.now(),
@@ -238,12 +242,12 @@ class CameraListener():
                 #             'world')
                 
                 self.marker_pose_pub.publish(pose_msg)
-                # rospy.logwarn(f'Published msg: {pose_msg}')
-                # self.enable_camera = False
-                # cv2.destroyAllWindows()
-                # return
-            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-                    print('')
+                rospy.logwarn(f'Published msg: {pose_msg}')
+                self.enable_camera = False
+                cv2.destroyAllWindows()
+                return
+            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException) as e:
+                    print(e)
         
 
         # if len(ref_row[0]) != 0:

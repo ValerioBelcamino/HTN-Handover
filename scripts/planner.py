@@ -57,15 +57,22 @@ def main():
     # time.sleep(3)
     client.traj_p.open_gripper('left')
     client.traj_p.open_gripper('right')
+    # client.traj_p.close_gripper('left')
+    # client.traj_p.close_gripper('right')
     # client.transfer(rigid.locations['table'], 'right')
-
+    # exit()
     # wait_idle(state1, client)
-    result = gtpyhop.find_plan(state1, [
-                                        ('wait_idle', client),
-                                        ('tuck_arms', 'robot', client),
-                                        # ('handover', 'robot', 'human', 'box', client),
-                                        # ('handover', 'robot', 'human', 'screwdriver', client),
-                                        ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3'], client)])
+    # result = gtpyhop.find_plan(state1, [
+    #                                     # ('wait_idle', client),
+    #                                     # ('tuck_arms', 'robot', client),
+    #                                     ('handover', 'robot', 'human', 'box', client),
+    #                                     ('handover', 'robot', 'human', 'box2', client),
+    #                                     ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3', 'brick4'], client),
+    #                                     ('deliver_objects', 'robot', ['brick5', 'brick6'], client),
+    #                                     ('handover', 'robot', 'human', 'screwdriver', client),
+    #                                     ('handover', 'robot', 'human', 'box3', client),
+    #                                     ])
+    result = gtpyhop.find_plan(state1, [('assembly_chair', client)])
     return
 
 
