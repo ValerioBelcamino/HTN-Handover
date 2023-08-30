@@ -222,6 +222,17 @@ def reset_selected_object(state):
     state.selected_object = None
     return state
 
+def define_goal(state):
+    if state.goal_object == None:
+        # CHANGE to scanning QR code on a box
+        state.goal_object = random.choice(['chair', 'child_chair', 'bottle_holder', 'paper_holder'])
+        return state
+
+def reset_goal(state):
+    if state.goal_object != None:
+        state.goal_object = None
+        return state
+
 gtpyhop.declare_actions(transfer, 
                         grasp, 
                         release, 
@@ -233,4 +244,6 @@ gtpyhop.declare_actions(transfer,
                         choose_arm, 
                         reset_active_arm, 
                         reset_selected_object,
-                        tuck_arms)
+                        tuck_arms,
+                        define_goal,
+                        reset_goal)

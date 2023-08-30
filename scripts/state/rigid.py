@@ -339,4 +339,8 @@ rigid.locations = {'table': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
                     'brick4_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
                     'brick5_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
                     'brick6_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
-                    'brick7_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2]} #place in front of the human where he assembles the chair
+                    'brick7_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
+                    'brick8_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
+                    'shelf1_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
+                    'shelf2_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
+                    'shelf3_pose': [rigid.screwdriver_pose, rigid.screwdriver_pose2]} #place in front of the human where he assembles the chair

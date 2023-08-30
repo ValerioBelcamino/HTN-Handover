@@ -72,7 +72,7 @@ def main():
     #                                     ('handover', 'robot', 'human', 'screwdriver', client),
     #                                     ('handover', 'robot', 'human', 'box3', client),
     #                                     ])
-    result = gtpyhop.find_plan(state1, [('assembly_chair', client)])
+    result = gtpyhop.find_plan(state1, [('loop', client)])
     return
 
 
