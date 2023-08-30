@@ -1,3 +1,26 @@
+## [Chair](https://www.ikea.com/it/it/assembly_instructions/oddvar-sgabello-pino__AA-766928-4-2.pdf)
+
+**Elements**: 8 metal screws, 8 wooden screws, 4 small screws, 4 plastic things, 4 bricks, 2 sides, 1 seat
+
+**Preparation**:
+
+* box 1 contains 4 wooden screws and 4 metal screws
+* box 2 contains 4 wooden screws and 4 metal screws
+* box 3 contains 4 small screws and 4 plastic things
+
+**Plan**:
+
+1. Bring box 1
+2. Bring box 2
+3. Bring 4 bricks
+4. Human puts 8 wooden screws in the 4 bricks
+5. Bring 2 sides
+6. Human connects the 2 sides to the 4 bricks
+7. Bring screwdriver
+8. Human screws the 8 metal screws in the 2 sides
+9. Bring box 3
+10. Human puts 4 small screws in the 4 plastic things to connect the seat to the chair
+
 
 ## [Bottle holder](https://www.ikea.com/it/it/assembly_instructions/hutten-portabottiglie-9-scomparti-legno-massiccio__AA-49900-4-2.pdf)
 
@@ -71,3 +94,20 @@
 9. Human connects the 2nd side to the 5 bricks using the 5 metal screws
 10. Bring the paper holder brick
 11. Human connects the paper holder brick
+
+## Association table
+
+| Element | Chair | Bottle holder | Child chair | Toilet paper holder |
+| --- | --- | --- | --- | --- |
+| brick1 | brick | brick | brick | side |
+| brick2 | brick | brick | back of chair | brick |
+| brick3 | brick | brick | seat | brick |
+| brick4 | brick | brick | side | brick |
+| brick5 | side | round brick | side | brick |
+| brick6 | side | round brick |  | brick |
+| brick7 |  | round brick |  | side |
+| brick8 |  | round brick |  | paper holder brick |
+| shelf1 |  | shelf |  |  |
+| shelf2 |  | shelf |  |  |
+| shelf3 |  | shelf |  |  |
+
