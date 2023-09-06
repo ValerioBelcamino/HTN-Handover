@@ -88,6 +88,8 @@ class TrajectoryPlanner():
 
         self.move_group_right.set_start_state_to_current_state()
         self.move_group_left.set_start_state_to_current_state()
+        self.move_group_left.set_goal_tolerance(10e-4)
+        self.move_group_right.set_goal_tolerance(10e-4)
         # self.obstacles.add_hand()
 
 
@@ -106,7 +108,7 @@ class TrajectoryPlanner():
         elif side == 'left':
             move_group = self.move_group_left
         
-        (plan, fraction) = move_group.compute_cartesian_path([destination_pose], 0.01, 0.0) #TODO MAX STEP
+        (plan, fraction) = move_group.compute_cartesian_path([destination_pose], 0.002, 0.0) #TODO MAX STEP
         # mg.set_pose_target(destination_pose)
         # plan = self.move_group.plan()
 

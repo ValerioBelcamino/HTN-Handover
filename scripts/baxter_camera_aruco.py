@@ -34,12 +34,16 @@ class CameraListener():
         self.current_marker = None
         self.enable_camera = False
         self.current_arm = None
+        self.iterations = 10
+        self.xs = []
+        self.ys = []
+        self.zs = []
 
         # THIS IS TO GRASP SOMETHING WHICH IS NOT RIGHT ON THE ARUCO CENTER --> MOVE SLIGHTLY DOWN AND FORWARD (X AXIS)
         self.static_offset_tf = np.asarray([
-                                            [1.0, 0.0, 0.0, 0.06],
+                                            [1.0, 0.0, 0.0, 0.07],
                                             [0.0, 1.0, 0.0, 0.0],
-                                            [0.0, 0.0, 1.0, 0.08],
+                                            [0.0, 0.0, 1.0, 0.075],
                                             [0.0, 0.0, 0.0, 1.0]
                                         ])
 
@@ -205,22 +209,34 @@ class CameraListener():
                 rr_arr = rr.ndarray
                 rr_arr = np.roll(rr_arr, -1)
                 # rr_arr2 = rr2.ndarray
+                self.xs.append(rt[0])
+                self.ys.append(rt[1])
+                self.zs.append(rt[2])
                 # rr_arr2 = np.roll(rr_arr2, -1)
-                pose_msg = Pose()
-                pose_msg.position.x = rt[0]
-                pose_msg.position.y = rt[1]
-                pose_msg.position.z = rt[2]
+                if len(self.xs) == self.iterations:
+                    pose_msg = Pose()
+                    # pose_msg.position.x = rt[0]
+                    # pose_msg.position.y = rt[1]
+                    # pose_msg.position.z = rt[2]
+                    pose_msg.position.x = float(format(sum(self.xs)/self.iterations, '.4f'))
+                    pose_msg.position.y = float(format(sum(self.ys)/self.iterations, '.4f'))
+                    pose_msg.position.z = float(format(sum(self.zs)/self.iterations, '.4f'))
+                # if pose_msg.position.z < -0.32:
+                #     pose_msg.position.z = -0.32
 
                 # # add small offset to Z
                 # pose_msg.position.z -= 0.06
                 # if pose_msg.position.z < -0.32:
                 #     pose_msg.position.z = -0.32
 
-                pose_msg.orientation.x = rr_arr[0] #1.0 #rr.ndarray[0]
-                pose_msg.orientation.y = rr_arr[1] #0.0 #rr.ndarray[1]
-                pose_msg.orientation.z = rr_arr[2] #0.0 #rr.ndarray[2]
-                pose_msg.orientation.w = rr_arr[3] #0.0 #rr.ndarray[3]
+                    pose_msg.orientation.x = rr_arr[0] #1.0 #rr.ndarray[0]
+                    pose_msg.orientation.y = rr_arr[1] #0.0 #rr.ndarray[1]
+                    pose_msg.orientation.z = rr_arr[2] #0.0 #rr.ndarray[2]
+                    pose_msg.orientation.w = rr_arr[3] #0.0 #rr.ndarray[3]
 
+                    self.xs = []
+                    self.ys = []
+                    self.zs = []
                 # br = tf.TransformBroadcaster()
                 # br.sendTransform(rt,
                 #           rr_arr,
@@ -241,11 +257,11 @@ class CameraListener():
                 #           'marker21' + str(self.current_marker),
                 #             'world')
                 
-                self.marker_pose_pub.publish(pose_msg)
-                rospy.logwarn(f'Published msg: {pose_msg}')
-                self.enable_camera = False
-                cv2.destroyAllWindows()
-                return
+                    self.marker_pose_pub.publish(pose_msg)
+                    rospy.logwarn(f'Published msg: {pose_msg}')
+                    self.enable_camera = False
+                    cv2.destroyAllWindows()
+                    return
             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException) as e:
                     print(e)
         

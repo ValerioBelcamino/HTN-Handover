@@ -42,7 +42,7 @@ class TrajectoryClient():
         self.aruco_activation_pub = rospy.Publisher("/aruco_detection_activation", Bool, queue_size=10)
         self.idle_classification_pub = rospy.Publisher("/IMU_HAR_activation", Bool, queue_size=10)
 
-        self.trajTime = 5.0 # Time to complete each trajectory 
+        self.trajTime = 3.5 # Time to complete each trajectory 
         self.traj_p = TrajectoryPlanner()
         self.stop_sleeping_sig = Event()
 
@@ -111,7 +111,7 @@ class TrajectoryClient():
         if msg.data:
             self.traj_p.open_gripper('right')
 
-    def execute_trajectory(self, trajectory, side):
+    def execute_trajectory(self, trajectory, side, speed):
 
         traj = Trajectory(side)
 
@@ -120,10 +120,23 @@ class TrajectoryClient():
         # limb_interface = baxter_interface.limb.Limb(self.limb)
 
         t = 0
+        counter = 0
+        avg = self.trajTime/len(trajectory.joint_trajectory.points)
+        third = len(trajectory.joint_trajectory.points) / 5
         for point in trajectory.joint_trajectory.points:
 
-            t += self.trajTime/len(trajectory.joint_trajectory.points)      #prima c'era 0.1
+            if counter < third:
+                t += (1.5*avg)-(counter * avg / (2*third))
+
+            elif counter >= third and counter < 4 * third:
+                t += avg
+
+            elif counter >= 4 * third:
+                t += avg + (counter * avg / (2*third))
+            # t += avg     #prima c'era 0.1
             traj.add_point(point.positions, point.velocities, point.accelerations, t)
+            
+            counter += 1
             
         traj.start()
         traj.wait()
@@ -132,6 +145,7 @@ class TrajectoryClient():
 
     def transfer(self, poses, side):
         failures = False
+        first = True
 
         for pose in poses:
             rospy.logerr("Transfer function called")
@@ -143,7 +157,10 @@ class TrajectoryClient():
             
             print('fraction', fract)
             if fract > 0.95:
-                self.execute_trajectory(simple_traj, side)
+                if first:
+                    self.execute_trajectory(simple_traj, side,3.5)
+                else:
+                    self.execute_trajectory(simple_traj, side,4.5)
             else:
                 rospy.logerr(fract)
                 failures = True

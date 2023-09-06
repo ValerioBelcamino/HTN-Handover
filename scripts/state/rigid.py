@@ -119,6 +119,35 @@ rigid.box3_loc2 = Pose(
 )
 
 
+rigid.box4_loc1 = Pose(
+    Point(
+        x = 0.212,
+        y = 0.857,
+        z = -0.20 #-0.22,
+    ),
+    Quaternion(
+        x = 0.7071068,
+        y = 0.7071068,
+        z = 0.0,
+        w = 0.0
+    )
+)
+
+rigid.box4_loc2 = Pose(
+    Point(
+        x = 0.212,
+        y = 0.877,
+        z = -0.31 #-0.22,
+    ),
+    Quaternion(
+        x = 0.7071068,
+        y = 0.7071068,
+        z = 0.0,
+        w = 0.0
+    )
+)
+
+
 rigid.handover_location = Pose(
     Point(
         x = 0.82,
@@ -168,7 +197,7 @@ rigid.workspace2 = Pose(
     Point(
         x = 0.60,
         y = -0.13 ,
-        z = -0.32,
+        z = -0.31,
     ),
     Quaternion(
         x = 1.0,
@@ -196,7 +225,7 @@ rigid.workspace2L = Pose(
     Point(
         x = 0.60,
         y = 0.13 ,
-        z = -0.32,
+        z = -0.31,
     ),
     Quaternion(
         x = 1.0,
@@ -324,6 +353,7 @@ rigid.locations = {'table': [rigid.screwdriver_pose, rigid.screwdriver_pose2],
                    'box_location': [rigid.box_loc1, rigid.box_loc2],
                    'box2_location': [rigid.box2_loc1, rigid.box2_loc2],
                    'box3_location': [rigid.box3_loc1, rigid.box3_loc2],
+                   'box4_location': [rigid.box4_loc1, rigid.box4_loc2],
                 #    'table2': [rigid.screwdriver_poseTMP, rigid.screwdriver_pose2TMP], 
                    'exchange point': [rigid.handover_location],
                     'X': [rigid.X],

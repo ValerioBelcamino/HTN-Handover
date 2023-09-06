@@ -42,7 +42,8 @@ class Zed2Saver():
     def save_img_callback(self, msg):
         image_ocv = self.bridge.imgmsg_to_cv2(msg, desired_encoding="passthrough")
         if self.isSaving:
-                cv2.imwrite(os.path.join(self.saving_path, str(rospy.Time.now()) + '.png'), image_ocv)
+                image_resize = cv2.resize(image_ocv, (1280, 720))
+                cv2.imwrite(os.path.join(self.saving_path, str(rospy.Time.now()) + '.png'), image_resize)
         
 
 if __name__ == '__main__':

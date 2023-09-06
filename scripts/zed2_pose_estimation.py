@@ -22,7 +22,7 @@ class ArucoDetection():
         self.trasl_list = []
         self.scene_markers = [100, 10, 1, 0, 20, 200, 2, 4, 40]
         self.smoothing_dict = {}
-        self.smoothing_window = 20
+        self.smoothing_window = 50
         self.enable_camera = False
         self.static_rot = np.asarray([
             [0.0, 1.0, 0.0],
@@ -279,7 +279,7 @@ class ArucoDetection():
                             trasl[2] = float(format(trasl[2], '.3f'))
                             p.position.x = trasl[0]
                             p.position.y = trasl[1]
-                            p.position.z = 0.#trasl[2] + 0.1
+                            p.position.z = -0.05#trasl[2] + 0.1
                             p.orientation.x = 1.0#r.ndarray[1]
                             p.orientation.y = 0.0#r.ndarray[2]
                             p.orientation.z = 0.0#r.ndarray[3]

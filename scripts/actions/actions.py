@@ -225,7 +225,11 @@ def reset_selected_object(state):
 def define_goal(state):
     if state.goal_object == None:
         # CHANGE to scanning QR code on a box
-        state.goal_object = random.choice(['chair', 'child_chair', 'bottle_holder', 'paper_holder'])
+        object = None
+        while object not in ['chair', 'child_chair', 'bottle_holder', 'paper_holder', 'stop']:
+            object = input('Please enter the object you want to build: \n Possible objects: chair, child_chair, bottle_holder, paper_holder or stop to stop \n')
+
+        state.goal_object = object
         return state
 
 def reset_goal(state):
