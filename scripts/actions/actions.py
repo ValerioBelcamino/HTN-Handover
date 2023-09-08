@@ -24,9 +24,9 @@ def transfer(state, agent, loc_to, traj_client):
                     loc_to_pose[i].position.y *= -1.0
             if len(rigid.locations[loc_from])>1:
                 if not traj_client.transfer([rigid.locations[loc_from][0]], state.active_arm[agent]):
-                    return None
+                    return state
             if not traj_client.transfer(loc_to_pose, state.active_arm[agent]):
-                return None
+                return state
             
             # here we should call the wrist camera
             # get the precise position of the object
@@ -43,7 +43,7 @@ def transfer(state, agent, loc_to, traj_client):
                     rigid.locations[state.selected_object + '_pose'].append(precise_pose)
                     print('new location for ', state.selected_object, ' is: ', rigid.locations[state.selected_object + '_pose'])
                     if not traj_client.transfer([precise_pose], state.active_arm[agent]):
-                        return None
+                        return state
 
         state.at[agent] = loc_to
         state.at[state.active_arm[agent]] = loc_to
@@ -235,6 +235,9 @@ def define_goal(state):
 def reset_goal(state):
     if state.goal_object != None:
         state.goal_object = None
+        state.at['screwdriver'] = 'table'
+        for b in ['box', 'box2', 'box3', 'box4']:
+            state.box_empty[b] = False
         return state
 
 gtpyhop.declare_actions(transfer, 

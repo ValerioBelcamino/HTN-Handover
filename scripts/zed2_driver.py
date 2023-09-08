@@ -5,9 +5,10 @@ import rospy
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
 import os
+import threading as th
 
 class Zed2Driver():
-    def __init__(self, isSaving = False, saving_path = '/home/index1/index_ws/src/baxter_moveit/data'):
+    def __init__(self, isSaving = False, saving_path = '/externalSSD/htn_experiment/'):
         rospy.init_node('zed2_driver', anonymous=True)
         self.image_pub = rospy.Publisher("/zed2_driver", Image, queue_size=10)
         self.isSaving = isSaving
@@ -63,7 +64,6 @@ class Zed2Driver():
         # print(zed.get_camera_information())
         real_ids = []
         iterations = 0
-
         tries = 0
 
         while not self.stop_looping or not rospy.is_shutdown():
@@ -83,6 +83,8 @@ class Zed2Driver():
             # print(image_ocv.shape)
             image_resize = cv2.resize(image_ocv, (1280, 720))
             cv2.imshow("Image", image_resize)
+
+            # print(os.path.join(self.saving_path, str(rospy.Time.now()) + '.png'))
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
@@ -95,5 +97,5 @@ class Zed2Driver():
         cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    HD = Zed2Driver(isSaving=False, saving_path='/home/index1/index_ws/src/baxter_moveit/data')
+    HD = Zed2Driver(isSaving=False, saving_path='/externalSSD/htn_experiment/')
     HD.loop()

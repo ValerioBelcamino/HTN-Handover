@@ -4,7 +4,7 @@
   <arg name="port1"           	     default="/dev/ttyACM0" />
   <arg name="save"           	     	     default="False" />
   <arg name="experiment_ID"          	     default="0" />
-  <arg name="base_saving_path"              default="/home/index1/Desktop/htn_experiment"/>
+  <arg name="base_saving_path"              default="/externalSSD/htn_experiment"/>
   
     
 

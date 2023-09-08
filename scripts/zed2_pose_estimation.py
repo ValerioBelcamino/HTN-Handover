@@ -83,7 +83,10 @@ class ArucoDetection():
 
         for key in self.smoothing_dict.keys():
             if key in ids:
-                smoothed_traslations[np.where(ids == key)] = (np.mean(self.smoothing_dict[key], axis=0))
+                # print(key)
+                # print(self.smoothing_dict[key])
+                # print(len(self.smoothing_dict[key]))
+                smoothed_traslations[np.where(ids == key)] = (np.mean(np.asarray(self.smoothing_dict[key]), axis=0))
         return np.asarray(smoothed_traslations).reshape(-1, 3,1)
 
     def get_transform_matrix(self, r_mat, t_vec):
