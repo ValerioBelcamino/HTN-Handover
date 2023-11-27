@@ -50,3 +50,26 @@ state.at = {'box': 'box_location',
             'brick7': 'brick7_pose',
             'brick8': 'brick8_pose',
             'brick9': 'brick9_pose'}
+
+
+chair_plan =
+[
+                # ('handover', 'robot', 'human', 'screwdriver', client),
+                ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3', 'brick4'], client), #ids 0, 1, 20, 200
+                ('handover', 'robot', 'human', 'box', client),
+                # ('wait_idle', client),
+            # ('handover', 'robot', 'human', 'box2', client),
+                # ('tuck_arms', 'robot', client),
+                # ('handover', 'robot', 'human', 'box2', client),
+                # ('handover', 'robot', 'human', 'box3', client),
+                # ('handover', 'robot', 'human', 'box4', client),
+                # ('handover', 'robot', 'human', 'box4', client),
+                # ('deliver_objects', 'robot',  ['brick5'], client), # id 100
+                # # # ('wait_idle', client),
+                # ('handover', 'robot', 'human', 'box3', client),
+                # ('handover', 'robot', 'human', 'box4', client),
+                # ('deliver_objects', 'robot', ['brick6'], client), # id 10
+                # # ('wait_idle', client),
+                # ('handover', 'robot', 'human', 'box2', client),
+
+                ]

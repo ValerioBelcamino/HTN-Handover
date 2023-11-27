@@ -54,7 +54,7 @@ class Zed2Saver():
             # self.current_image = None
             self.lock.release()
 
-            np.save(os.path.join('/externalSSD/htn_experiment/0/Zed', str(rospy.Time.now()) + '.npy'), tmp)
+            np.save(os.path.join('/externalSSD/htn_experiment/trial2', str(rospy.Time.now()) + '.npy'), tmp)
         return
     
     

@@ -23,7 +23,7 @@ class ArucoDetection():
         self.scene_markers = [100, 10, 1, 0, 20, 200, 2, 4, 40]
         self.smoothing_dict = {}
         self.smoothing_window = 50
-        self.enable_camera = False
+        self.enable_camera = True
         self.static_rot = np.asarray([
             [0.0, 1.0, 0.0],
             [1.0, 0.0, 0.0],
@@ -212,7 +212,6 @@ class ArucoDetection():
         rospy.loginfo(f'Enabling ZED2 camera: {self.enable_camera}')
 
 
-
     def loop(self, msg):
         if not self.enable_camera:
             return
@@ -222,13 +221,18 @@ class ArucoDetection():
         iterations = 0
 
         tries = 0
+        # image_ocv = self.bridge.imgmsg_to_cv2(msg, desired_encoding="passthrough")
+        # image_ocv_resize = cv2.resize(image_ocv, (1280, 720))
+        # cv2.imshow("image_ocv", image_ocv)
 
+        # return
         while iterations<30:
             # ret, image_ocv = cap.read()
             # image_ocv, depth_map = self.grab_zed_frame(self.zed, self.image_size, self.depth_zed, self.image_zed)
             image_ocv = self.bridge.imgmsg_to_cv2(msg, desired_encoding="passthrough")
-            # depth_map_resize = cv2.resize(depth_map, (1280, 720))
-            # cv2.imshow("depth_map", depth_map_resize)
+            image_ocv_resize = cv2.resize(image_ocv, (1280, 720))
+            cv2.imshow("image_ocv", image_ocv_resize)
+
             # Display the left image from the numpy array
             image_ocv_grey = cv2.cvtColor(image_ocv, cv2.COLOR_BGR2GRAY)
             corners, ids, rejected = self.arucoDetector.detectMarkers(image_ocv_grey)
@@ -301,7 +305,7 @@ class ArucoDetection():
                         pose_array_msg.poses.append(pose_dict[key])
                     self.obj_pub.publish(pose_array_msg)
                     self.smoothing_dict = {}
-                    self.enable_camera = False
+                    # self.enable_camera = False
                     # rospy.loginfo(pose_array_msg)
                     return pose_dict #[]
                 else:
@@ -316,11 +320,11 @@ class ArucoDetection():
                     rospy.loginfo(pose_array_msg)
                     self.obj_pub.publish(pose_array_msg)
                     self.smoothing_dict = {}
-                    self.enable_camera = False
+                    # self.enable_camera = False
                     return pose_dict
 
             image_resize = cv2.resize(image_ocv, (1280, 720))
-            cv2.imshow("Image", image_resize)
+            # cv2.imshow("Image", image_resize)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         # self.obj_pub.publish('_'.join([str(id) for id in real_ids]))

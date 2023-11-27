@@ -3,7 +3,7 @@
 
   <arg name="port1"           	     default="/dev/ttyACM0" />
   <arg name="save"           	     	     default="False" />
-  <arg name="experiment_ID"          	     default="0" />
+  <arg name="experiment_ID"          	     default="trial2" />
   <arg name="base_saving_path"              default="/externalSSD/htn_experiment"/>
   
     
@@ -41,7 +41,7 @@
   </node>  
   <node name="zed2_pose_estimation" pkg="baxter_moveit" type="zed2_pose_estimation.py" output="screen" />  
   
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find baxter_moveit)/config/rviz_planning_scene.rviz" required="true" />
+
 </group>
 
 

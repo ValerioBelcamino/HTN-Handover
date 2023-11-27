@@ -73,28 +73,30 @@ def choose_and_deliver(state, obj_list, agent, traj_client):
 def assembly_chair(state, client):
     if state.goal_object == 'chair':
         return  [
-                # ('wait_idle', client),
-                # ('tuck_arms', 'robot', client),
+                # ('handover', 'robot', 'human', 'screwdriver', client),
+                ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3', 'brick4'], client), #ids 0, 1, 20, 200
                 ('handover', 'robot', 'human', 'box', client),
+                # ('wait_idle', client),
+            # ('handover', 'robot', 'human', 'box2', client),
+                # ('tuck_arms', 'robot', client),
                 # ('handover', 'robot', 'human', 'box2', client),
                 # ('handover', 'robot', 'human', 'box3', client),
                 # ('handover', 'robot', 'human', 'box4', client),
                 # ('handover', 'robot', 'human', 'box4', client),
-                ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3', 'brick4'], client), #ids 0, 1, 20, 200
-                ('deliver_objects', 'robot',  ['brick5'], client), # id 100
+                # ('deliver_objects', 'robot',  ['brick5'], client), # id 100
+                # # # ('wait_idle', client),
+                # ('handover', 'robot', 'human', 'box3', client),
+                # ('handover', 'robot', 'human', 'box4', client),
+                # ('deliver_objects', 'robot', ['brick6'], client), # id 10
                 # # ('wait_idle', client),
-                ('handover', 'robot', 'human', 'box3', client),
-                ('handover', 'robot', 'human', 'box4', client),
-                ('deliver_objects', 'robot', ['brick6'], client), # id 10
-                ('wait_idle', client),
-                ('handover', 'robot', 'human', 'box2', client),
-                ('handover', 'robot', 'human', 'screwdriver', client),
+                # ('handover', 'robot', 'human', 'box2', client),
 
                 ]
 
 def assembly_bottle_holder(state, client):
     if state.goal_object == 'bottle_holder':
         return  [
+            # ('handover', 'robot', 'human', 'box2', client),
             # ('deliver_objects', 'robot', ['brick7', 'brick8', 'brick9'], client), # ids 2, 4, 40                
                 ('deliver_objects', 'robot', ['brick5'], client), # id 100
                 ('deliver_objects', 'robot', ['brick1', 'brick2', 'brick3'], client), # ids 0, 1, 20
@@ -115,7 +117,7 @@ def assembly_child_chair(state, client):
                 ('handover', 'robot', 'human', 'screwdriver', client),
                 ('handover', 'robot', 'human', 'box', client),
                 ('deliver_objects', 'robot', ['brick1', 'brick3'], client), # ids 0, 1
-                ('wait_idle', client),
+                # ('wait_idle', client),
                 ('deliver_objects', 'robot', ['brick2'], client), # marker 20
                 ('deliver_objects', 'robot', ['brick4'], client), # marker 200
                 ('deliver_objects', 'robot', ['brick5'], client), # marker 100
@@ -142,9 +144,12 @@ def assembly_paper_holder(state, client):
 
 def loop(state, traj_client):
     if True:
+        # print(depth)
+        # if depth == 1009:
+        #     return []
         return [
             ('define_goal',), 
-            ('wait_idle', traj_client),
+            # ('wait_idle', traj_client),
             ('assembly', traj_client), 
             ('reset_goal',), 
             ('loop', traj_client)]

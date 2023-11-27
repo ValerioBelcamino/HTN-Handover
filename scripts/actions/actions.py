@@ -238,6 +238,7 @@ def reset_goal(state):
         state.at['screwdriver'] = 'table'
         for b in ['box', 'box2', 'box3', 'box4']:
             state.box_empty[b] = False
+            state.at[b] = state.boxes_home_pose[b]
         return state
 
 gtpyhop.declare_actions(transfer, 
